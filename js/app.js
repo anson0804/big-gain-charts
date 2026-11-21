@@ -17,6 +17,8 @@
   };
 
   const STORAGE_PREFIX = "chart-browser:annotations:";
+  const DRAW_PREFIX = "chart-browser:drawings:";
+  const DRAW_TOOLS = { trend: true, hline: true, rect: true };
 
   const els = {
     yearFilter: document.getElementById("year-filter"),
@@ -26,6 +28,17 @@
     counter: document.getElementById("counter"),
     measureBtn: document.getElementById("measure-btn"),
     textBtn: document.getElementById("text-btn"),
+    trendBtn: document.getElementById("trend-btn"),
+    hlineBtn: document.getElementById("hline-btn"),
+    rectBtn: document.getElementById("rect-btn"),
+    deleteDrawBtn: document.getElementById("delete-draw-btn"),
+    fullscreenBtn: document.getElementById("fullscreen-btn"),
+    saveDrawBtn: document.getElementById("save-draw-btn"),
+    clearDrawBtn: document.getElementById("clear-draw-btn"),
+    drawList: document.getElementById("draw-list"),
+    drawEmpty: document.getElementById("draw-empty"),
+    drawSaved: document.getElementById("draw-saved"),
+    stage: document.getElementById("app"),
     status: document.getElementById("status"),
     chart: document.getElementById("chart"),
     wrap: document.getElementById("chart-wrap"),
@@ -46,12 +59,15 @@
     bars: [],
     overlays: null,
     currentPath: null,
-    tool: "none", // none | measure | text
+    tool: "none", // none | measure | text | trend | hline | rect
     shiftHeld: false,
     measuring: false,
     measureStart: null,
     notes: [],
     selectedNoteId: null,
+    drawings: [],
+    selectedDrawingId: null,
+    draft: null,
     pendingNote: null,
     panEnabled: true,
   };
@@ -62,6 +78,7 @@
   let maSeries = {};
   let measurePrimitive = null;
   let notesPrimitive = null;
+  let drawingsPrimitive = null;
 
   function setStatus(message, kind) {
     els.status.textContent = message || "";
@@ -184,16 +201,22 @@
     });
   }
 
+  function drawToolActive() {
+    return !!DRAW_TOOLS[state.tool];
+  }
+
   function measureActive() {
+    if (drawToolActive() || state.tool === "text") return false;
     return state.tool === "measure" || state.shiftHeld;
   }
 
   function syncInteraction() {
-    setPanEnabled(!measureActive() && !state.measuring);
+    const drawing = drawToolActive() || !!state.draft;
+    setPanEnabled(!measureActive() && !state.measuring && !drawing);
     if (chart) {
       chart.applyOptions({
         crosshair: {
-          mode: measureActive()
+          mode: measureActive() || drawToolActive()
             ? LC.CrosshairMode.Normal
             : LC.CrosshairMode.Magnet,
         },
@@ -201,17 +224,165 @@
     }
     els.measureBtn.classList.toggle("active", state.tool === "measure");
     els.textBtn.classList.toggle("active", state.tool === "text");
-    els.wrap.style.cursor = state.tool === "text"
+    els.trendBtn.classList.toggle("active", state.tool === "trend");
+    els.hlineBtn.classList.toggle("active", state.tool === "hline");
+    els.rectBtn.classList.toggle("active", state.tool === "rect");
+    els.deleteDrawBtn.disabled = !state.selectedDrawingId;
+    els.stage.classList.toggle("is-drawing", drawing);
+    const cursor = state.tool === "text"
       ? "text"
-      : measureActive()
+      : measureActive() || drawToolActive()
         ? "crosshair"
         : "";
+    els.wrap.style.cursor = cursor;
   }
 
   function clearMeasure() {
     state.measuring = false;
     state.measureStart = null;
     if (measurePrimitive) measurePrimitive.clear();
+  }
+
+  function drawingName(type) {
+    if (type === "hline") return "水平線";
+    if (type === "rect") return "矩形";
+    return "趨勢線";
+  }
+
+  function sanitizeDrawing(raw) {
+    if (!raw || !raw.id) return null;
+    const id = String(raw.id);
+    if (raw.type === "hline") {
+      const price = Number(raw.price);
+      if (!Number.isFinite(price)) return null;
+      return { id, type: "hline", price };
+    }
+    if (raw.type !== "trend" && raw.type !== "rect") return null;
+    const time1 = CB.normalizeTime(raw.time1) || raw.time1;
+    const time2 = CB.normalizeTime(raw.time2) || raw.time2;
+    const price1 = Number(raw.price1);
+    const price2 = Number(raw.price2);
+    if (!time1 || !time2 || !Number.isFinite(price1) || !Number.isFinite(price2)) return null;
+    return { id, type: raw.type, time1, price1, time2, price2 };
+  }
+
+  function loadDrawings(path) {
+    if (!path) return [];
+    try {
+      const raw = localStorage.getItem(DRAW_PREFIX + path);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return parsed.map(sanitizeDrawing).filter(Boolean);
+    } catch (err) {
+      return [];
+    }
+  }
+
+  function persistDrawings() {
+    if (!state.currentPath) return false;
+    try {
+      const key = DRAW_PREFIX + state.currentPath;
+      if (!state.drawings.length) localStorage.removeItem(key);
+      else localStorage.setItem(key, JSON.stringify(state.drawings));
+      if (els.drawSaved) els.drawSaved.textContent = "已儲存";
+      return true;
+    } catch (err) {
+      if (els.drawSaved) els.drawSaved.textContent = "未能儲存";
+      setStatus("無法儲存畫線（瀏覽器儲存空間可能已滿）。", "error");
+      return false;
+    }
+  }
+
+  function drawingLabel(item) {
+    if (item.type === "hline") return `水平線　${CB.formatPrice(item.price)}`;
+    const a = `${item.time1} ${CB.formatPrice(item.price1)}`;
+    const b = `${item.time2} ${CB.formatPrice(item.price2)}`;
+    return `${drawingName(item.type)}　${a} → ${b}`;
+  }
+
+  function refreshDrawings() {
+    if (!drawingsPrimitive) return;
+    drawingsPrimitive.setBars(state.bars);
+    const draft = state.draft
+      ? {
+          type: state.draft.type,
+          time1: state.draft.p1.time,
+          price1: state.draft.p1.price,
+          time2: state.draft.p2.time,
+          price2: state.draft.p2.price,
+          price: state.draft.p1.price,
+        }
+      : null;
+    drawingsPrimitive.setModel(state.drawings, state.selectedDrawingId, draft);
+  }
+
+  function renderDrawList() {
+    const list = els.drawList;
+    list.replaceChildren();
+    const empty = !state.drawings.length;
+    els.drawEmpty.hidden = !empty;
+    els.clearDrawBtn.disabled = empty;
+    state.drawings.forEach((item) => {
+      const li = document.createElement("li");
+      if (item.id === state.selectedDrawingId) li.className = "selected";
+      const open = document.createElement("button");
+      open.type = "button";
+      open.className = "draw-item";
+      open.textContent = drawingLabel(item);
+      open.addEventListener("click", () => {
+        state.selectedDrawingId = item.id;
+        state.selectedNoteId = null;
+        refreshNotesPrimitive();
+        refreshDrawings();
+        renderDrawList();
+        syncInteraction();
+      });
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "draw-remove";
+      remove.textContent = "刪除";
+      remove.addEventListener("click", () => deleteDrawing(item.id));
+      li.append(open, remove);
+      list.append(li);
+    });
+    syncInteraction();
+  }
+
+  function cancelDraft() {
+    state.draft = null;
+    refreshDrawings();
+  }
+
+  function commitDrawing(item) {
+    state.drawings = state.drawings.concat(item);
+    state.selectedDrawingId = item.id;
+    state.draft = null;
+    persistDrawings();
+    refreshDrawings();
+    renderDrawList();
+  }
+
+  function deleteDrawing(id) {
+    if (!id) return;
+    state.drawings = state.drawings.filter((item) => item.id !== id);
+    if (state.selectedDrawingId === id) state.selectedDrawingId = null;
+    persistDrawings();
+    refreshDrawings();
+    renderDrawList();
+  }
+
+  function newDrawingId() {
+    return `d-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  }
+
+  function pointsFarEnough(a, b) {
+    if (!a || !b) return false;
+    return a.time !== b.time || Math.abs(a.price - b.price) > Math.max(Math.abs(a.price) * 0.000001, 1e-8);
+  }
+
+  function pointerMoved(event, draft) {
+    return Math.hypot(event.clientX - draft.originX, event.clientY - draft.originY) > 8;
   }
 
   function hideNoteEditor() {
@@ -344,8 +515,10 @@
 
     measurePrimitive = new CB.MeasurePrimitive();
     notesPrimitive = new CB.NotesPrimitive();
+    drawingsPrimitive = new CB.DrawingsPrimitive();
     candleSeries.attachPrimitive(measurePrimitive);
     candleSeries.attachPrimitive(notesPrimitive);
+    candleSeries.attachPrimitive(drawingsPrimitive);
 
     chart.subscribeCrosshairMove(onCrosshairMove);
     layoutPanes();
@@ -444,6 +617,48 @@
         return;
       }
 
+      if (drawToolActive()) {
+        const point = getPointFromEvent(event);
+        if (!point || !state.currentPath) return;
+        event.preventDefault();
+        event.stopPropagation();
+        state.selectedNoteId = null;
+        refreshNotesPrimitive();
+        if (state.tool === "hline") {
+          state.draft = {
+            type: "hline",
+            p1: point,
+            p2: point,
+            phase: "drag",
+            originX: event.clientX,
+            originY: event.clientY,
+          };
+        } else if (!state.draft || state.draft.type !== state.tool || state.draft.phase !== "await") {
+          state.draft = {
+            type: state.tool,
+            p1: point,
+            p2: point,
+            phase: "drag",
+            originX: event.clientX,
+            originY: event.clientY,
+            clicks: 0,
+          };
+        } else {
+          state.draft.p2 = point;
+          state.draft.phase = "drag";
+          state.draft.originX = event.clientX;
+          state.draft.originY = event.clientY;
+        }
+        refreshDrawings();
+        setPanEnabled(false);
+        try {
+          paneEl.setPointerCapture(event.pointerId);
+        } catch (err) {
+          /* ignore */
+        }
+        return;
+      }
+
       if (measureActive()) {
         const point = getPointFromEvent(event);
         if (!point) return;
@@ -457,17 +672,101 @@
         } catch (err) {
           /* ignore */
         }
+        return;
+      }
+
+      if (state.tool === "none" && drawingsPrimitive) {
+        const localX = event.clientX - paneEl.getBoundingClientRect().left;
+        const localY = event.clientY - paneEl.getBoundingClientRect().top;
+        const hit = drawingsPrimitive.hitTest(localX, localY);
+        if (hit && hit.externalId) {
+          event.preventDefault();
+          event.stopPropagation();
+          state.selectedDrawingId = hit.externalId;
+          state.selectedNoteId = null;
+          refreshNotesPrimitive();
+          refreshDrawings();
+          renderDrawList();
+        } else if (state.selectedDrawingId) {
+          state.selectedDrawingId = null;
+          refreshDrawings();
+          renderDrawList();
+        }
       }
     });
 
     paneEl.addEventListener("pointermove", (event) => {
+      if (state.draft && state.draft.phase === "drag") {
+        const point = getPointFromEvent(event);
+        if (!point) return;
+        if (state.draft.type === "hline") {
+          state.draft.p1 = point;
+          state.draft.p2 = point;
+        } else {
+          state.draft.p2 = point;
+        }
+        refreshDrawings();
+        return;
+      }
       if (!state.measuring || !state.measureStart) return;
       const point = getPointFromEvent(event);
       if (!point) return;
       measurePrimitive.setPoints(state.measureStart, point);
     });
 
-    const endMeasureDrag = (event) => {
+    const endPointer = (event) => {
+      if (state.draft && state.draft.phase === "drag") {
+        const point = getPointFromEvent(event);
+        const draft = state.draft;
+        if (point) {
+          if (draft.type === "hline") {
+            draft.p1 = point;
+            draft.p2 = point;
+          } else {
+            draft.p2 = point;
+          }
+        }
+        const moved = pointerMoved(event, draft);
+        if (draft.type === "hline") {
+          commitDrawing({
+            id: newDrawingId(),
+            type: "hline",
+            price: draft.p1.price,
+          });
+          if (els.drawSaved) els.drawSaved.textContent = "已儲存";
+          return;
+        }
+        const distinct = pointsFarEnough(draft.p1, draft.p2);
+        if (moved && distinct) {
+          commitDrawing({
+            id: newDrawingId(),
+            type: draft.type,
+            time1: draft.p1.time,
+            price1: draft.p1.price,
+            time2: draft.p2.time,
+            price2: draft.p2.price,
+          });
+          return;
+        }
+        if (draft.clicks > 0 && distinct) {
+          commitDrawing({
+            id: newDrawingId(),
+            type: draft.type,
+            time1: draft.p1.time,
+            price1: draft.p1.price,
+            time2: draft.p2.time,
+            price2: draft.p2.price,
+          });
+          return;
+        }
+        draft.phase = "await";
+        draft.clicks += 1;
+        draft.p2 = draft.p1;
+        refreshDrawings();
+        if (els.drawSaved) els.drawSaved.textContent = "再點一下完成";
+        syncInteraction();
+        return;
+      }
       if (!state.measuring) return;
       const point = getPointFromEvent(event) || measurePrimitive._p2;
       if (state.measureStart && point) {
@@ -477,8 +776,16 @@
       state.measureStart = null;
       syncInteraction();
     };
-    paneEl.addEventListener("pointerup", endMeasureDrag);
-    paneEl.addEventListener("pointercancel", endMeasureDrag);
+    paneEl.addEventListener("pointerup", endPointer);
+    paneEl.addEventListener("pointercancel", (event) => {
+      if (state.draft && state.draft.phase === "drag") {
+        cancelDraft();
+        if (els.drawSaved) els.drawSaved.textContent = "";
+        syncInteraction();
+        return;
+      }
+      endPointer(event);
+    });
   }
 
   function clearSeries() {
@@ -487,6 +794,11 @@
     Object.values(maSeries).forEach((s) => s.setData([]));
     measurePrimitive.clear();
     notesPrimitive.setNotes([], null);
+    state.drawings = [];
+    state.selectedDrawingId = null;
+    state.draft = null;
+    refreshDrawings();
+    renderDrawList();
     state.bars = [];
     state.overlays = null;
     setLegend(null, { ema10: "—", ema20: "—", sma50: "—", sma200: "—" });
@@ -495,7 +807,12 @@
   async function loadCase(index, fromNavEnd) {
     hideNoteEditor();
     clearMeasure();
+    cancelDraft();
     state.selectedNoteId = null;
+    state.selectedDrawingId = null;
+    state.drawings = [];
+    refreshDrawings();
+    renderDrawList();
 
     if (index < 0 || index >= state.filtered.length) {
       if (fromNavEnd) {
@@ -535,6 +852,9 @@
     state.bars = parsed.bars;
     state.overlays = CB.computeOverlays(parsed.bars);
     state.notes = loadNotes(item.path);
+    state.drawings = loadDrawings(item.path);
+    state.selectedDrawingId = null;
+    if (els.drawSaved) els.drawSaved.textContent = state.drawings.length ? "已儲存" : "";
 
     candleSeries.setData(
       parsed.bars.map((b) => ({
@@ -558,6 +878,8 @@
     maSeries.sma200.setData(state.overlays.series.sma200);
     measurePrimitive.setBars(parsed.bars);
     refreshNotesPrimitive();
+    refreshDrawings();
+    renderDrawList();
     chart.timeScale().fitContent();
     layoutPanes();
 
@@ -654,12 +976,28 @@
     if (isTypingTarget(event.target)) return;
 
     if (event.key === "Escape") {
+      event.preventDefault();
+      if (state.draft) {
+        cancelDraft();
+        if (els.drawSaved) els.drawSaved.textContent = state.drawings.length ? "已儲存" : "";
+        syncInteraction();
+        return;
+      }
+      if (isFallbackFullscreen()) exitFullscreen();
       hideNoteEditor();
       clearMeasure();
       state.tool = "none";
       state.selectedNoteId = null;
+      state.selectedDrawingId = null;
       refreshNotesPrimitive();
-      syncInteraction();
+      refreshDrawings();
+      renderDrawList();
+      return;
+    }
+
+    if ((event.key === "Delete" || event.key === "Backspace") && state.selectedDrawingId) {
+      event.preventDefault();
+      deleteDrawing(state.selectedDrawingId);
       return;
     }
 
@@ -687,6 +1025,73 @@
     }
   }
 
+  function fullscreenElement() {
+    return document.fullscreenElement || document.webkitFullscreenElement || null;
+  }
+
+  function isFallbackFullscreen() {
+    return els.stage.classList.contains("is-fs-fallback");
+  }
+
+  function isChartFullscreen() {
+    return fullscreenElement() === els.stage || isFallbackFullscreen();
+  }
+
+  function syncFullscreenButton() {
+    const on = isChartFullscreen();
+    els.fullscreenBtn.textContent = on ? "結束全螢幕" : "全螢幕";
+    els.fullscreenBtn.classList.toggle("active", on);
+    els.fullscreenBtn.title = on ? "回到文章" : "放大圖表";
+    requestAnimationFrame(() => resizeChart());
+    setTimeout(() => resizeChart(), 60);
+  }
+
+  function enterFallbackFullscreen() {
+    els.stage.classList.add("is-fs-fallback");
+    document.body.classList.add("fs-lock");
+    syncFullscreenButton();
+  }
+
+  function exitFullscreen() {
+    const current = fullscreenElement();
+    if (current) {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) Promise.resolve(exit.call(document)).catch(() => {});
+    }
+    els.stage.classList.remove("is-fs-fallback");
+    document.body.classList.remove("fs-lock");
+    syncFullscreenButton();
+  }
+
+  function enterFullscreen() {
+    const req = els.stage.requestFullscreen || els.stage.webkitRequestFullscreen;
+    if (!req) {
+      enterFallbackFullscreen();
+      return;
+    }
+    Promise.resolve(req.call(els.stage)).catch(() => enterFallbackFullscreen());
+  }
+
+  function toggleFullscreen() {
+    if (isChartFullscreen()) exitFullscreen();
+    else enterFullscreen();
+  }
+
+  function setChartTool(next) {
+    hideNoteEditor();
+    clearMeasure();
+    cancelDraft();
+    state.selectedNoteId = null;
+    refreshNotesPrimitive();
+    state.tool = state.tool === next ? "none" : next;
+    if (els.drawSaved) {
+      if (state.tool === "hline") els.drawSaved.textContent = "點一個價位";
+      else if (state.tool === "trend" || state.tool === "rect") els.drawSaved.textContent = "拖拉或再點一下";
+      else els.drawSaved.textContent = state.drawings.length ? "已儲存" : "";
+    }
+    syncInteraction();
+  }
+
   function bindUi() {
     els.yearFilter.addEventListener("change", () => {
       populateCases();
@@ -706,29 +1111,32 @@
     els.prevBtn.addEventListener("click", goPrev);
     els.nextBtn.addEventListener("click", goNext);
 
-    els.measureBtn.addEventListener("click", () => {
-      hideNoteEditor();
-      if (state.tool === "measure") {
-        state.tool = "none";
-        clearMeasure();
-      } else {
-        state.tool = "measure";
-        state.selectedNoteId = null;
-        refreshNotesPrimitive();
-      }
-      syncInteraction();
+    els.measureBtn.addEventListener("click", () => setChartTool("measure"));
+    els.textBtn.addEventListener("click", () => setChartTool("text"));
+    els.trendBtn.addEventListener("click", () => setChartTool("trend"));
+    els.hlineBtn.addEventListener("click", () => setChartTool("hline"));
+    els.rectBtn.addEventListener("click", () => setChartTool("rect"));
+    els.deleteDrawBtn.addEventListener("click", () => {
+      if (state.selectedDrawingId) deleteDrawing(state.selectedDrawingId);
+      else setStatus("先點選一條畫線。", "info");
     });
-
-    els.textBtn.addEventListener("click", () => {
-      if (state.tool === "text") {
-        state.tool = "none";
-        hideNoteEditor();
-      } else {
-        state.tool = "text";
-        clearMeasure();
-      }
-      syncInteraction();
+    els.saveDrawBtn.addEventListener("click", () => {
+      if (persistDrawings()) setStatus("已儲存這個案例的畫線。", "info");
     });
+    els.clearDrawBtn.addEventListener("click", () => {
+      if (!state.currentPath || !state.drawings.length) return;
+      state.drawings = [];
+      state.selectedDrawingId = null;
+      state.draft = null;
+      persistDrawings();
+      if (els.drawSaved) els.drawSaved.textContent = "已清除";
+      refreshDrawings();
+      renderDrawList();
+      setStatus("已清除這個案例的畫線。", "info");
+    });
+    els.fullscreenBtn.addEventListener("click", toggleFullscreen);
+    document.addEventListener("fullscreenchange", syncFullscreenButton);
+    document.addEventListener("webkitfullscreenchange", syncFullscreenButton);
 
     els.noteInput.addEventListener("keydown", (event) => {
       event.stopPropagation();

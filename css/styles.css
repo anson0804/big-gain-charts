@@ -448,6 +448,131 @@ a:focus-visible,
   display: flex;
 }
 
+.chart-card.is-drawing #chart {
+  touch-action: none;
+}
+
+.draw-panel {
+  flex: 0 0 auto;
+  border-top: 1px solid var(--border);
+  background: #10151e;
+  padding: 8px 12px 10px;
+  max-height: 168px;
+  overflow: auto;
+}
+
+.draw-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+}
+
+.draw-panel-head strong {
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.draw-saved {
+  color: #9ec1ff;
+  font-size: 12px;
+  min-height: 1em;
+}
+
+.draw-actions {
+  margin-left: auto;
+  display: inline-flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.draw-empty {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.draw-empty[hidden] {
+  display: none;
+}
+
+.draw-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.draw-list:empty {
+  display: none;
+}
+
+.draw-list li {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  min-width: 0;
+}
+
+.chart-card .draw-list button.draw-item {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: 32px;
+  padding: 4px 8px;
+  text-align: left;
+  white-space: normal;
+  line-height: 1.4;
+  background: transparent;
+}
+
+.chart-card .draw-list li.selected button.draw-item {
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.chart-card .draw-list button.draw-remove {
+  flex: 0 0 auto;
+}
+
+body.fs-lock {
+  overflow: hidden;
+}
+
+.chart-card:fullscreen,
+.chart-card:-webkit-full-screen,
+.chart-card.is-fs-fallback {
+  border-radius: 0;
+  width: 100%;
+  height: 100dvh;
+  max-height: none;
+  display: flex;
+  flex-direction: column;
+  background: #0b0e13;
+  overflow: hidden;
+}
+
+.chart-card.is-fs-fallback {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+}
+
+.chart-card:fullscreen #chart-wrap,
+.chart-card:-webkit-full-screen #chart-wrap,
+.chart-card.is-fs-fallback #chart-wrap {
+  flex: 1 1 0;
+  height: 0;
+  min-height: 0;
+}
+
+.chart-card:fullscreen .draw-panel,
+.chart-card:-webkit-full-screen .draw-panel,
+.chart-card.is-fs-fallback .draw-panel {
+  max-height: 28vh;
+}
+
 .footer {
   padding: 18px 22px 26px;
   text-align: center;
@@ -524,6 +649,19 @@ a:focus-visible,
 
   .chart-card .counter {
     min-width: max-content;
+  }
+
+  .draw-panel-head {
+    flex-wrap: wrap;
+  }
+
+  .draw-actions {
+    margin-left: 0;
+  }
+
+  .chart-card .draw-list button.draw-item,
+  .chart-card .draw-list button.draw-remove {
+    min-height: 40px;
   }
 }
 
