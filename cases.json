@@ -1,0 +1,1692 @@
+{
+  "ok": true,
+  "error": null,
+  "cases": [
+    {
+      "path": "2015/2015_FIEE.csv",
+      "year": "2015",
+      "ticker": "FIEE",
+      "label": "2015 FIEE"
+    },
+    {
+      "path": "2015/2015_WKHS.csv",
+      "year": "2015",
+      "ticker": "WKHS",
+      "label": "2015 WKHS"
+    },
+    {
+      "path": "2016/2016_ACB.csv",
+      "year": "2016",
+      "ticker": "ACB",
+      "label": "2016 ACB"
+    },
+    {
+      "path": "2016/2016_BCDA.csv",
+      "year": "2016",
+      "ticker": "BCDA",
+      "label": "2016 BCDA"
+    },
+    {
+      "path": "2016/2016_CC.csv",
+      "year": "2016",
+      "ticker": "CC",
+      "label": "2016 CC"
+    },
+    {
+      "path": "2016/2016_CRBP.csv",
+      "year": "2016",
+      "ticker": "CRBP",
+      "label": "2016 CRBP"
+    },
+    {
+      "path": "2016/2016_SKY.csv",
+      "year": "2016",
+      "ticker": "SKY",
+      "label": "2016 SKY"
+    },
+    {
+      "path": "2016/2016_TECK.csv",
+      "year": "2016",
+      "ticker": "TECK",
+      "label": "2016 TECK"
+    },
+    {
+      "path": "2017/2017_ACB.csv",
+      "year": "2017",
+      "ticker": "ACB",
+      "label": "2017 ACB"
+    },
+    {
+      "path": "2017/2017_GRVY.csv",
+      "year": "2017",
+      "ticker": "GRVY",
+      "label": "2017 GRVY"
+    },
+    {
+      "path": "2017/2017_HIVE.csv",
+      "year": "2017",
+      "ticker": "HIVE",
+      "label": "2017 HIVE"
+    },
+    {
+      "path": "2017/2017_KRFG.csv",
+      "year": "2017",
+      "ticker": "KRFG",
+      "label": "2017 KRFG"
+    },
+    {
+      "path": "2017/2017_LEXX.csv",
+      "year": "2017",
+      "ticker": "LEXX",
+      "label": "2017 LEXX"
+    },
+    {
+      "path": "2017/2017_MDGL.csv",
+      "year": "2017",
+      "ticker": "MDGL",
+      "label": "2017 MDGL"
+    },
+    {
+      "path": "2017/2017_MTRI.csv",
+      "year": "2017",
+      "ticker": "MTRI",
+      "label": "2017 MTRI"
+    },
+    {
+      "path": "2017/2017_NKTR.csv",
+      "year": "2017",
+      "ticker": "NKTR",
+      "label": "2017 NKTR"
+    },
+    {
+      "path": "2017/2017_PVLA.csv",
+      "year": "2017",
+      "ticker": "PVLA",
+      "label": "2017 PVLA"
+    },
+    {
+      "path": "2017/2017_RIOT.csv",
+      "year": "2017",
+      "ticker": "RIOT",
+      "label": "2017 RIOT"
+    },
+    {
+      "path": "2017/2017_SGMOQ.csv",
+      "year": "2017",
+      "ticker": "SGMOQ",
+      "label": "2017 SGMOQ"
+    },
+    {
+      "path": "2017/2017_SIEB.csv",
+      "year": "2017",
+      "ticker": "SIEB",
+      "label": "2017 SIEB"
+    },
+    {
+      "path": "2017/2017_XNET.csv",
+      "year": "2017",
+      "ticker": "XNET",
+      "label": "2017 XNET"
+    },
+    {
+      "path": "2018/2018_BMPA.csv",
+      "year": "2018",
+      "ticker": "BMPA",
+      "label": "2018 BMPA"
+    },
+    {
+      "path": "2018/2018_EVHO.csv",
+      "year": "2018",
+      "ticker": "EVHO",
+      "label": "2018 EVHO"
+    },
+    {
+      "path": "2018/2018_LFSWF.csv",
+      "year": "2018",
+      "ticker": "LFSWF",
+      "label": "2018 LFSWF"
+    },
+    {
+      "path": "2018/2018_PRQR.csv",
+      "year": "2018",
+      "ticker": "PRQR",
+      "label": "2018 PRQR"
+    },
+    {
+      "path": "2018/2018_TBCH.csv",
+      "year": "2018",
+      "ticker": "TBCH",
+      "label": "2018 TBCH"
+    },
+    {
+      "path": "2018/2018_TNDM.csv",
+      "year": "2018",
+      "ticker": "TNDM",
+      "label": "2018 TNDM"
+    },
+    {
+      "path": "2018/2018_TONX.csv",
+      "year": "2018",
+      "ticker": "TONX",
+      "label": "2018 TONX"
+    },
+    {
+      "path": "2018/2018_USBC.csv",
+      "year": "2018",
+      "ticker": "USBC",
+      "label": "2018 USBC"
+    },
+    {
+      "path": "2019/2019_AIOS.csv",
+      "year": "2019",
+      "ticker": "AIOS",
+      "label": "2019 AIOS"
+    },
+    {
+      "path": "2019/2019_ARWR.csv",
+      "year": "2019",
+      "ticker": "ARWR",
+      "label": "2019 ARWR"
+    },
+    {
+      "path": "2019/2019_AXSM.csv",
+      "year": "2019",
+      "ticker": "AXSM",
+      "label": "2019 AXSM"
+    },
+    {
+      "path": "2019/2019_CDLX.csv",
+      "year": "2019",
+      "ticker": "CDLX",
+      "label": "2019 CDLX"
+    },
+    {
+      "path": "2019/2019_ENPH.csv",
+      "year": "2019",
+      "ticker": "ENPH",
+      "label": "2019 ENPH"
+    },
+    {
+      "path": "2019/2019_EVER.csv",
+      "year": "2019",
+      "ticker": "EVER",
+      "label": "2019 EVER"
+    },
+    {
+      "path": "2019/2019_FLGT.csv",
+      "year": "2019",
+      "ticker": "FLGT",
+      "label": "2019 FLGT"
+    },
+    {
+      "path": "2019/2019_KOD.csv",
+      "year": "2019",
+      "ticker": "KOD",
+      "label": "2019 KOD"
+    },
+    {
+      "path": "2019/2019_MAJI.csv",
+      "year": "2019",
+      "ticker": "MAJI",
+      "label": "2019 MAJI"
+    },
+    {
+      "path": "2019/2019_NGNE.csv",
+      "year": "2019",
+      "ticker": "NGNE",
+      "label": "2019 NGNE"
+    },
+    {
+      "path": "2019/2019_OESX.csv",
+      "year": "2019",
+      "ticker": "OESX",
+      "label": "2019 OESX"
+    },
+    {
+      "path": "2019/2019_QUTX.csv",
+      "year": "2019",
+      "ticker": "QUTX",
+      "label": "2019 QUTX"
+    },
+    {
+      "path": "2019/2019_RCEL.csv",
+      "year": "2019",
+      "ticker": "RCEL",
+      "label": "2019 RCEL"
+    },
+    {
+      "path": "2019/2019_RLMD.csv",
+      "year": "2019",
+      "ticker": "RLMD",
+      "label": "2019 RLMD"
+    },
+    {
+      "path": "2019/2019_SLGCF.csv",
+      "year": "2019",
+      "ticker": "SLGCF",
+      "label": "2019 SLGCF"
+    },
+    {
+      "path": "2019/2019_SMTI.csv",
+      "year": "2019",
+      "ticker": "SMTI",
+      "label": "2019 SMTI"
+    },
+    {
+      "path": "2019/2019_WKHS.csv",
+      "year": "2019",
+      "ticker": "WKHS",
+      "label": "2019 WKHS"
+    },
+    {
+      "path": "2020/2020_ABAT.csv",
+      "year": "2020",
+      "ticker": "ABAT",
+      "label": "2020 ABAT"
+    },
+    {
+      "path": "2020/2020_ACMR.csv",
+      "year": "2020",
+      "ticker": "ACMR",
+      "label": "2020 ACMR"
+    },
+    {
+      "path": "2020/2020_AEYE.csv",
+      "year": "2020",
+      "ticker": "AEYE",
+      "label": "2020 AEYE"
+    },
+    {
+      "path": "2020/2020_AGNT.csv",
+      "year": "2020",
+      "ticker": "AGNT",
+      "label": "2020 AGNT"
+    },
+    {
+      "path": "2020/2020_AIFF.csv",
+      "year": "2020",
+      "ticker": "AIFF",
+      "label": "2020 AIFF"
+    },
+    {
+      "path": "2020/2020_ALT.csv",
+      "year": "2020",
+      "ticker": "ALT",
+      "label": "2020 ALT"
+    },
+    {
+      "path": "2020/2020_APPN.csv",
+      "year": "2020",
+      "ticker": "APPN",
+      "label": "2020 APPN"
+    },
+    {
+      "path": "2020/2020_APPS.csv",
+      "year": "2020",
+      "ticker": "APPS",
+      "label": "2020 APPS"
+    },
+    {
+      "path": "2020/2020_AQMS.csv",
+      "year": "2020",
+      "ticker": "AQMS",
+      "label": "2020 AQMS"
+    },
+    {
+      "path": "2020/2020_ARCT.csv",
+      "year": "2020",
+      "ticker": "ARCT",
+      "label": "2020 ARCT"
+    },
+    {
+      "path": "2020/2020_ATOM.csv",
+      "year": "2020",
+      "ticker": "ATOM",
+      "label": "2020 ATOM"
+    },
+    {
+      "path": "2020/2020_AWHL.csv",
+      "year": "2020",
+      "ticker": "AWHL",
+      "label": "2020 AWHL"
+    },
+    {
+      "path": "2020/2020_BABYF.csv",
+      "year": "2020",
+      "ticker": "BABYF",
+      "label": "2020 BABYF"
+    },
+    {
+      "path": "2020/2020_BEEM.csv",
+      "year": "2020",
+      "ticker": "BEEM",
+      "label": "2020 BEEM"
+    },
+    {
+      "path": "2020/2020_BILI.csv",
+      "year": "2020",
+      "ticker": "BILI",
+      "label": "2020 BILI"
+    },
+    {
+      "path": "2020/2020_BLNK.csv",
+      "year": "2020",
+      "ticker": "BLNK",
+      "label": "2020 BLNK"
+    },
+    {
+      "path": "2020/2020_BRAG.csv",
+      "year": "2020",
+      "ticker": "BRAG",
+      "label": "2020 BRAG"
+    },
+    {
+      "path": "2020/2020_BTBT.csv",
+      "year": "2020",
+      "ticker": "BTBT",
+      "label": "2020 BTBT"
+    },
+    {
+      "path": "2020/2020_BYRN.csv",
+      "year": "2020",
+      "ticker": "BYRN",
+      "label": "2020 BYRN"
+    },
+    {
+      "path": "2020/2020_CELH.csv",
+      "year": "2020",
+      "ticker": "CELH",
+      "label": "2020 CELH"
+    },
+    {
+      "path": "2020/2020_CHPT.csv",
+      "year": "2020",
+      "ticker": "CHPT",
+      "label": "2020 CHPT"
+    },
+    {
+      "path": "2020/2020_CLDX.csv",
+      "year": "2020",
+      "ticker": "CLDX",
+      "label": "2020 CLDX"
+    },
+    {
+      "path": "2020/2020_CLSK.csv",
+      "year": "2020",
+      "ticker": "CLSK",
+      "label": "2020 CLSK"
+    },
+    {
+      "path": "2020/2020_CMT.csv",
+      "year": "2020",
+      "ticker": "CMT",
+      "label": "2020 CMT"
+    },
+    {
+      "path": "2020/2020_CODX.csv",
+      "year": "2020",
+      "ticker": "CODX",
+      "label": "2020 CODX"
+    },
+    {
+      "path": "2020/2020_CRDF.csv",
+      "year": "2020",
+      "ticker": "CRDF",
+      "label": "2020 CRDF"
+    },
+    {
+      "path": "2020/2020_CRIS.csv",
+      "year": "2020",
+      "ticker": "CRIS",
+      "label": "2020 CRIS"
+    },
+    {
+      "path": "2020/2020_CRNC.csv",
+      "year": "2020",
+      "ticker": "CRNC",
+      "label": "2020 CRNC"
+    },
+    {
+      "path": "2020/2020_CRWD.csv",
+      "year": "2020",
+      "ticker": "CRWD",
+      "label": "2020 CRWD"
+    },
+    {
+      "path": "2020/2020_CUBT.csv",
+      "year": "2020",
+      "ticker": "CUBT",
+      "label": "2020 CUBT"
+    },
+    {
+      "path": "2020/2020_DFTX.csv",
+      "year": "2020",
+      "ticker": "DFTX",
+      "label": "2020 DFTX"
+    },
+    {
+      "path": "2020/2020_DKNG.csv",
+      "year": "2020",
+      "ticker": "DKNG",
+      "label": "2020 DKNG"
+    },
+    {
+      "path": "2020/2020_DNLI.csv",
+      "year": "2020",
+      "ticker": "DNLI",
+      "label": "2020 DNLI"
+    },
+    {
+      "path": "2020/2020_DQ.csv",
+      "year": "2020",
+      "ticker": "DQ",
+      "label": "2020 DQ"
+    },
+    {
+      "path": "2020/2020_ENPH.csv",
+      "year": "2020",
+      "ticker": "ENPH",
+      "label": "2020 ENPH"
+    },
+    {
+      "path": "2020/2020_ETHE.csv",
+      "year": "2020",
+      "ticker": "ETHE",
+      "label": "2020 ETHE"
+    },
+    {
+      "path": "2020/2020_FATE.csv",
+      "year": "2020",
+      "ticker": "FATE",
+      "label": "2020 FATE"
+    },
+    {
+      "path": "2020/2020_FCEL.csv",
+      "year": "2020",
+      "ticker": "FCEL",
+      "label": "2020 FCEL"
+    },
+    {
+      "path": "2020/2020_FKWL.csv",
+      "year": "2020",
+      "ticker": "FKWL",
+      "label": "2020 FKWL"
+    },
+    {
+      "path": "2020/2020_FLGT.csv",
+      "year": "2020",
+      "ticker": "FLGT",
+      "label": "2020 FLGT"
+    },
+    {
+      "path": "2020/2020_FNGR.csv",
+      "year": "2020",
+      "ticker": "FNGR",
+      "label": "2020 FNGR"
+    },
+    {
+      "path": "2020/2020_FPTE.csv",
+      "year": "2020",
+      "ticker": "FPTE",
+      "label": "2020 FPTE"
+    },
+    {
+      "path": "2020/2020_FSLY.csv",
+      "year": "2020",
+      "ticker": "FSLY",
+      "label": "2020 FSLY"
+    },
+    {
+      "path": "2020/2020_FUTU.csv",
+      "year": "2020",
+      "ticker": "FUTU",
+      "label": "2020 FUTU"
+    },
+    {
+      "path": "2020/2020_FVRR.csv",
+      "year": "2020",
+      "ticker": "FVRR",
+      "label": "2020 FVRR"
+    },
+    {
+      "path": "2020/2020_GNPX.csv",
+      "year": "2020",
+      "ticker": "GNPX",
+      "label": "2020 GNPX"
+    },
+    {
+      "path": "2020/2020_GP.csv",
+      "year": "2020",
+      "ticker": "GP",
+      "label": "2020 GP"
+    },
+    {
+      "path": "2020/2020_GRVY.csv",
+      "year": "2020",
+      "ticker": "GRVY",
+      "label": "2020 GRVY"
+    },
+    {
+      "path": "2020/2020_GRWG.csv",
+      "year": "2020",
+      "ticker": "GRWG",
+      "label": "2020 GRWG"
+    },
+    {
+      "path": "2020/2020_GTBP.csv",
+      "year": "2020",
+      "ticker": "GTBP",
+      "label": "2020 GTBP"
+    },
+    {
+      "path": "2020/2020_HYFT.csv",
+      "year": "2020",
+      "ticker": "HYFT",
+      "label": "2020 HYFT"
+    },
+    {
+      "path": "2020/2020_JMIA.csv",
+      "year": "2020",
+      "ticker": "JMIA",
+      "label": "2020 JMIA"
+    },
+    {
+      "path": "2020/2020_MARA.csv",
+      "year": "2020",
+      "ticker": "MARA",
+      "label": "2020 MARA"
+    },
+    {
+      "path": "2020/2020_MCRB.csv",
+      "year": "2020",
+      "ticker": "MCRB",
+      "label": "2020 MCRB"
+    },
+    {
+      "path": "2020/2020_MRDN.csv",
+      "year": "2020",
+      "ticker": "MRDN",
+      "label": "2020 MRDN"
+    },
+    {
+      "path": "2020/2020_MRNA.csv",
+      "year": "2020",
+      "ticker": "MRNA",
+      "label": "2020 MRNA"
+    },
+    {
+      "path": "2020/2020_MVIS.csv",
+      "year": "2020",
+      "ticker": "MVIS",
+      "label": "2020 MVIS"
+    },
+    {
+      "path": "2020/2020_NET.csv",
+      "year": "2020",
+      "ticker": "NET",
+      "label": "2020 NET"
+    },
+    {
+      "path": "2020/2020_NIO.csv",
+      "year": "2020",
+      "ticker": "NIO",
+      "label": "2020 NIO"
+    },
+    {
+      "path": "2020/2020_NVAX.csv",
+      "year": "2020",
+      "ticker": "NVAX",
+      "label": "2020 NVAX"
+    },
+    {
+      "path": "2020/2020_NXH.csv",
+      "year": "2020",
+      "ticker": "NXH",
+      "label": "2020 NXH"
+    },
+    {
+      "path": "2020/2020_OCUL.csv",
+      "year": "2020",
+      "ticker": "OCUL",
+      "label": "2020 OCUL"
+    },
+    {
+      "path": "2020/2020_PACB.csv",
+      "year": "2020",
+      "ticker": "PACB",
+      "label": "2020 PACB"
+    },
+    {
+      "path": "2020/2020_PDD.csv",
+      "year": "2020",
+      "ticker": "PDD",
+      "label": "2020 PDD"
+    },
+    {
+      "path": "2020/2020_PLUG.csv",
+      "year": "2020",
+      "ticker": "PLUG",
+      "label": "2020 PLUG"
+    },
+    {
+      "path": "2020/2020_PRPH.csv",
+      "year": "2020",
+      "ticker": "PRPH",
+      "label": "2020 PRPH"
+    },
+    {
+      "path": "2020/2020_PRTS.csv",
+      "year": "2020",
+      "ticker": "PRTS",
+      "label": "2020 PRTS"
+    },
+    {
+      "path": "2020/2020_PTON.csv",
+      "year": "2020",
+      "ticker": "PTON",
+      "label": "2020 PTON"
+    },
+    {
+      "path": "2020/2020_PTPI.csv",
+      "year": "2020",
+      "ticker": "PTPI",
+      "label": "2020 PTPI"
+    },
+    {
+      "path": "2020/2020_QUBT.csv",
+      "year": "2020",
+      "ticker": "QUBT",
+      "label": "2020 QUBT"
+    },
+    {
+      "path": "2020/2020_RIOT.csv",
+      "year": "2020",
+      "ticker": "RIOT",
+      "label": "2020 RIOT"
+    },
+    {
+      "path": "2020/2020_RUN.csv",
+      "year": "2020",
+      "ticker": "RUN",
+      "label": "2020 RUN"
+    },
+    {
+      "path": "2020/2020_RVP.csv",
+      "year": "2020",
+      "ticker": "RVP",
+      "label": "2020 RVP"
+    },
+    {
+      "path": "2020/2020_SE.csv",
+      "year": "2020",
+      "ticker": "SE",
+      "label": "2020 SE"
+    },
+    {
+      "path": "2020/2020_SICP.csv",
+      "year": "2020",
+      "ticker": "SICP",
+      "label": "2020 SICP"
+    },
+    {
+      "path": "2020/2020_SITM.csv",
+      "year": "2020",
+      "ticker": "SITM",
+      "label": "2020 SITM"
+    },
+    {
+      "path": "2020/2020_SKE.csv",
+      "year": "2020",
+      "ticker": "SKE",
+      "label": "2020 SKE"
+    },
+    {
+      "path": "2020/2020_SLNH.csv",
+      "year": "2020",
+      "ticker": "SLNH",
+      "label": "2020 SLNH"
+    },
+    {
+      "path": "2020/2020_TGTX.csv",
+      "year": "2020",
+      "ticker": "TGTX",
+      "label": "2020 TGTX"
+    },
+    {
+      "path": "2020/2020_TOON.csv",
+      "year": "2020",
+      "ticker": "TOON",
+      "label": "2020 TOON"
+    },
+    {
+      "path": "2020/2020_TSLA.csv",
+      "year": "2020",
+      "ticker": "TSLA",
+      "label": "2020 TSLA"
+    },
+    {
+      "path": "2020/2020_TSNDF.csv",
+      "year": "2020",
+      "ticker": "TSNDF",
+      "label": "2020 TSNDF"
+    },
+    {
+      "path": "2020/2020_TWST.csv",
+      "year": "2020",
+      "ticker": "TWST",
+      "label": "2020 TWST"
+    },
+    {
+      "path": "2020/2020_UAVS.csv",
+      "year": "2020",
+      "ticker": "UAVS",
+      "label": "2020 UAVS"
+    },
+    {
+      "path": "2020/2020_VERI.csv",
+      "year": "2020",
+      "ticker": "VERI",
+      "label": "2020 VERI"
+    },
+    {
+      "path": "2020/2020_VIVO.csv",
+      "year": "2020",
+      "ticker": "VIVO",
+      "label": "2020 VIVO"
+    },
+    {
+      "path": "2020/2020_VNET.csv",
+      "year": "2020",
+      "ticker": "VNET",
+      "label": "2020 VNET"
+    },
+    {
+      "path": "2020/2020_WKHS.csv",
+      "year": "2020",
+      "ticker": "WKHS",
+      "label": "2020 WKHS"
+    },
+    {
+      "path": "2020/2020_ZM.csv",
+      "year": "2020",
+      "ticker": "ZM",
+      "label": "2020 ZM"
+    },
+    {
+      "path": "2020/2020_ZS.csv",
+      "year": "2020",
+      "ticker": "ZS",
+      "label": "2020 ZS"
+    },
+    {
+      "path": "2021/2021_AEHR.csv",
+      "year": "2021",
+      "ticker": "AEHR",
+      "label": "2021 AEHR"
+    },
+    {
+      "path": "2021/2021_AMC.csv",
+      "year": "2021",
+      "ticker": "AMC",
+      "label": "2021 AMC"
+    },
+    {
+      "path": "2021/2021_AMR.csv",
+      "year": "2021",
+      "ticker": "AMR",
+      "label": "2021 AMR"
+    },
+    {
+      "path": "2021/2021_AMTX.csv",
+      "year": "2021",
+      "ticker": "AMTX",
+      "label": "2021 AMTX"
+    },
+    {
+      "path": "2021/2021_ASTH.csv",
+      "year": "2021",
+      "ticker": "ASTH",
+      "label": "2021 ASTH"
+    },
+    {
+      "path": "2021/2021_AZ.csv",
+      "year": "2021",
+      "ticker": "AZ",
+      "label": "2021 AZ"
+    },
+    {
+      "path": "2021/2021_BBW.csv",
+      "year": "2021",
+      "ticker": "BBW",
+      "label": "2021 BBW"
+    },
+    {
+      "path": "2021/2021_BTCY.csv",
+      "year": "2021",
+      "ticker": "BTCY",
+      "label": "2021 BTCY"
+    },
+    {
+      "path": "2021/2021_CAR.csv",
+      "year": "2021",
+      "ticker": "CAR",
+      "label": "2021 CAR"
+    },
+    {
+      "path": "2021/2021_CLMT.csv",
+      "year": "2021",
+      "ticker": "CLMT",
+      "label": "2021 CLMT"
+    },
+    {
+      "path": "2021/2021_DDS.csv",
+      "year": "2021",
+      "ticker": "DDS",
+      "label": "2021 DDS"
+    },
+    {
+      "path": "2021/2021_DPLS.csv",
+      "year": "2021",
+      "ticker": "DPLS",
+      "label": "2021 DPLS"
+    },
+    {
+      "path": "2021/2021_EP.csv",
+      "year": "2021",
+      "ticker": "EP",
+      "label": "2021 EP"
+    },
+    {
+      "path": "2021/2021_ESEA.csv",
+      "year": "2021",
+      "ticker": "ESEA",
+      "label": "2021 ESEA"
+    },
+    {
+      "path": "2021/2021_FGPR.csv",
+      "year": "2021",
+      "ticker": "FGPR",
+      "label": "2021 FGPR"
+    },
+    {
+      "path": "2021/2021_FLNA.csv",
+      "year": "2021",
+      "ticker": "FLNA",
+      "label": "2021 FLNA"
+    },
+    {
+      "path": "2021/2021_GME.csv",
+      "year": "2021",
+      "ticker": "GME",
+      "label": "2021 GME"
+    },
+    {
+      "path": "2021/2021_IQST.csv",
+      "year": "2021",
+      "ticker": "IQST",
+      "label": "2021 IQST"
+    },
+    {
+      "path": "2021/2021_IVDA.csv",
+      "year": "2021",
+      "ticker": "IVDA",
+      "label": "2021 IVDA"
+    },
+    {
+      "path": "2021/2021_JILL.csv",
+      "year": "2021",
+      "ticker": "JILL",
+      "label": "2021 JILL"
+    },
+    {
+      "path": "2021/2021_KRFG.csv",
+      "year": "2021",
+      "ticker": "KRFG",
+      "label": "2021 KRFG"
+    },
+    {
+      "path": "2021/2021_KRUS.csv",
+      "year": "2021",
+      "ticker": "KRUS",
+      "label": "2021 KRUS"
+    },
+    {
+      "path": "2021/2021_LEAT.csv",
+      "year": "2021",
+      "ticker": "LEAT",
+      "label": "2021 LEAT"
+    },
+    {
+      "path": "2021/2021_LWLG.csv",
+      "year": "2021",
+      "ticker": "LWLG",
+      "label": "2021 LWLG"
+    },
+    {
+      "path": "2021/2021_LXU.csv",
+      "year": "2021",
+      "ticker": "LXU",
+      "label": "2021 LXU"
+    },
+    {
+      "path": "2021/2021_MLMC.csv",
+      "year": "2021",
+      "ticker": "MLMC",
+      "label": "2021 MLMC"
+    },
+    {
+      "path": "2021/2021_MPU.csv",
+      "year": "2021",
+      "ticker": "MPU",
+      "label": "2021 MPU"
+    },
+    {
+      "path": "2021/2021_OFSTF.csv",
+      "year": "2021",
+      "ticker": "OFSTF",
+      "label": "2021 OFSTF"
+    },
+    {
+      "path": "2021/2021_PMTS.csv",
+      "year": "2021",
+      "ticker": "PMTS",
+      "label": "2021 PMTS"
+    },
+    {
+      "path": "2021/2021_PROP.csv",
+      "year": "2021",
+      "ticker": "PROP",
+      "label": "2021 PROP"
+    },
+    {
+      "path": "2021/2021_PRTA.csv",
+      "year": "2021",
+      "ticker": "PRTA",
+      "label": "2021 PRTA"
+    },
+    {
+      "path": "2021/2021_QXL.csv",
+      "year": "2021",
+      "ticker": "QXL",
+      "label": "2021 QXL"
+    },
+    {
+      "path": "2021/2021_RDCT.csv",
+      "year": "2021",
+      "ticker": "RDCT",
+      "label": "2021 RDCT"
+    },
+    {
+      "path": "2021/2021_REAX.csv",
+      "year": "2021",
+      "ticker": "REAX",
+      "label": "2021 REAX"
+    },
+    {
+      "path": "2021/2021_RGBPP.csv",
+      "year": "2021",
+      "ticker": "RGBPP",
+      "label": "2021 RGBPP"
+    },
+    {
+      "path": "2021/2021_SM.csv",
+      "year": "2021",
+      "ticker": "SM",
+      "label": "2021 SM"
+    },
+    {
+      "path": "2021/2021_SMID.csv",
+      "year": "2021",
+      "ticker": "SMID",
+      "label": "2021 SMID"
+    },
+    {
+      "path": "2021/2021_SYAXF.csv",
+      "year": "2021",
+      "ticker": "SYAXF",
+      "label": "2021 SYAXF"
+    },
+    {
+      "path": "2021/2021_TRRSF.csv",
+      "year": "2021",
+      "ticker": "TRRSF",
+      "label": "2021 TRRSF"
+    },
+    {
+      "path": "2021/2021_UAN.csv",
+      "year": "2021",
+      "ticker": "UAN",
+      "label": "2021 UAN"
+    },
+    {
+      "path": "2021/2021_WFRD.csv",
+      "year": "2021",
+      "ticker": "WFRD",
+      "label": "2021 WFRD"
+    },
+    {
+      "path": "2022/2022_ASC.csv",
+      "year": "2022",
+      "ticker": "ASC",
+      "label": "2022 ASC"
+    },
+    {
+      "path": "2022/2022_KLXE.csv",
+      "year": "2022",
+      "ticker": "KLXE",
+      "label": "2022 KLXE"
+    },
+    {
+      "path": "2022/2022_MTR.csv",
+      "year": "2022",
+      "ticker": "MTR",
+      "label": "2022 MTR"
+    },
+    {
+      "path": "2022/2022_STNG.csv",
+      "year": "2022",
+      "ticker": "STNG",
+      "label": "2022 STNG"
+    },
+    {
+      "path": "2022/2022_TH.csv",
+      "year": "2022",
+      "ticker": "TH",
+      "label": "2022 TH"
+    },
+    {
+      "path": "2023/2023_AAOI.csv",
+      "year": "2023",
+      "ticker": "AAOI",
+      "label": "2023 AAOI"
+    },
+    {
+      "path": "2023/2023_AFRM.csv",
+      "year": "2023",
+      "ticker": "AFRM",
+      "label": "2023 AFRM"
+    },
+    {
+      "path": "2023/2023_APP.csv",
+      "year": "2023",
+      "ticker": "APP",
+      "label": "2023 APP"
+    },
+    {
+      "path": "2023/2023_ARBK.csv",
+      "year": "2023",
+      "ticker": "ARBK",
+      "label": "2023 ARBK"
+    },
+    {
+      "path": "2023/2023_BBIO.csv",
+      "year": "2023",
+      "ticker": "BBIO",
+      "label": "2023 BBIO"
+    },
+    {
+      "path": "2023/2023_BITW.csv",
+      "year": "2023",
+      "ticker": "BITW",
+      "label": "2023 BITW"
+    },
+    {
+      "path": "2023/2023_BNKK.csv",
+      "year": "2023",
+      "ticker": "BNKK",
+      "label": "2023 BNKK"
+    },
+    {
+      "path": "2023/2023_CLSK.csv",
+      "year": "2023",
+      "ticker": "CLSK",
+      "label": "2023 CLSK"
+    },
+    {
+      "path": "2023/2023_COIN.csv",
+      "year": "2023",
+      "ticker": "COIN",
+      "label": "2023 COIN"
+    },
+    {
+      "path": "2023/2023_CVNA.csv",
+      "year": "2023",
+      "ticker": "CVNA",
+      "label": "2023 CVNA"
+    },
+    {
+      "path": "2023/2023_DFH.csv",
+      "year": "2023",
+      "ticker": "DFH",
+      "label": "2023 DFH"
+    },
+    {
+      "path": "2023/2023_DRCT.csv",
+      "year": "2023",
+      "ticker": "DRCT",
+      "label": "2023 DRCT"
+    },
+    {
+      "path": "2023/2023_EBON.csv",
+      "year": "2023",
+      "ticker": "EBON",
+      "label": "2023 EBON"
+    },
+    {
+      "path": "2023/2023_ETHE.csv",
+      "year": "2023",
+      "ticker": "ETHE",
+      "label": "2023 ETHE"
+    },
+    {
+      "path": "2023/2023_EYPT.csv",
+      "year": "2023",
+      "ticker": "EYPT",
+      "label": "2023 EYPT"
+    },
+    {
+      "path": "2023/2023_GDLC.csv",
+      "year": "2023",
+      "ticker": "GDLC",
+      "label": "2023 GDLC"
+    },
+    {
+      "path": "2023/2023_GXLM.csv",
+      "year": "2023",
+      "ticker": "GXLM",
+      "label": "2023 GXLM"
+    },
+    {
+      "path": "2023/2023_GYRE.csv",
+      "year": "2023",
+      "ticker": "GYRE",
+      "label": "2023 GYRE"
+    },
+    {
+      "path": "2023/2023_HMDPF.csv",
+      "year": "2023",
+      "ticker": "HMDPF",
+      "label": "2023 HMDPF"
+    },
+    {
+      "path": "2023/2023_HZN.csv",
+      "year": "2023",
+      "ticker": "HZN",
+      "label": "2023 HZN"
+    },
+    {
+      "path": "2023/2023_IMNM.csv",
+      "year": "2023",
+      "ticker": "IMNM",
+      "label": "2023 IMNM"
+    },
+    {
+      "path": "2023/2023_IRON.csv",
+      "year": "2023",
+      "ticker": "IRON",
+      "label": "2023 IRON"
+    },
+    {
+      "path": "2023/2023_LMB.csv",
+      "year": "2023",
+      "ticker": "LMB",
+      "label": "2023 LMB"
+    },
+    {
+      "path": "2023/2023_LTCN.csv",
+      "year": "2023",
+      "ticker": "LTCN",
+      "label": "2023 LTCN"
+    },
+    {
+      "path": "2023/2023_MARA.csv",
+      "year": "2023",
+      "ticker": "MARA",
+      "label": "2023 MARA"
+    },
+    {
+      "path": "2023/2023_MLTX.csv",
+      "year": "2023",
+      "ticker": "MLTX",
+      "label": "2023 MLTX"
+    },
+    {
+      "path": "2023/2023_MSTR.csv",
+      "year": "2023",
+      "ticker": "MSTR",
+      "label": "2023 MSTR"
+    },
+    {
+      "path": "2023/2023_NPCE.csv",
+      "year": "2023",
+      "ticker": "NPCE",
+      "label": "2023 NPCE"
+    },
+    {
+      "path": "2023/2023_OLMA.csv",
+      "year": "2023",
+      "ticker": "OLMA",
+      "label": "2023 OLMA"
+    },
+    {
+      "path": "2023/2023_PLSE.csv",
+      "year": "2023",
+      "ticker": "PLSE",
+      "label": "2023 PLSE"
+    },
+    {
+      "path": "2023/2023_QXO.csv",
+      "year": "2023",
+      "ticker": "QXO",
+      "label": "2023 QXO"
+    },
+    {
+      "path": "2023/2023_RIOT.csv",
+      "year": "2023",
+      "ticker": "RIOT",
+      "label": "2023 RIOT"
+    },
+    {
+      "path": "2023/2023_SYM.csv",
+      "year": "2023",
+      "ticker": "SYM",
+      "label": "2023 SYM"
+    },
+    {
+      "path": "2024/2024_APP.csv",
+      "year": "2024",
+      "ticker": "APP",
+      "label": "2024 APP"
+    },
+    {
+      "path": "2024/2024_ARQT.csv",
+      "year": "2024",
+      "ticker": "ARQT",
+      "label": "2024 ARQT"
+    },
+    {
+      "path": "2024/2024_BBAR.csv",
+      "year": "2024",
+      "ticker": "BBAR",
+      "label": "2024 BBAR"
+    },
+    {
+      "path": "2024/2024_BYRN.csv",
+      "year": "2024",
+      "ticker": "BYRN",
+      "label": "2024 BYRN"
+    },
+    {
+      "path": "2024/2024_CANG.csv",
+      "year": "2024",
+      "ticker": "CANG",
+      "label": "2024 CANG"
+    },
+    {
+      "path": "2024/2024_CHSN.csv",
+      "year": "2024",
+      "ticker": "CHSN",
+      "label": "2024 CHSN"
+    },
+    {
+      "path": "2024/2024_CORZ.csv",
+      "year": "2024",
+      "ticker": "CORZ",
+      "label": "2024 CORZ"
+    },
+    {
+      "path": "2024/2024_DAVE.csv",
+      "year": "2024",
+      "ticker": "DAVE",
+      "label": "2024 DAVE"
+    },
+    {
+      "path": "2024/2024_DJTWW.csv",
+      "year": "2024",
+      "ticker": "DJTWW",
+      "label": "2024 DJTWW"
+    },
+    {
+      "path": "2024/2024_DOGZ.csv",
+      "year": "2024",
+      "ticker": "DOGZ",
+      "label": "2024 DOGZ"
+    },
+    {
+      "path": "2024/2024_DRUG.csv",
+      "year": "2024",
+      "ticker": "DRUG",
+      "label": "2024 DRUG"
+    },
+    {
+      "path": "2024/2024_FMCKJ.csv",
+      "year": "2024",
+      "ticker": "FMCKJ",
+      "label": "2024 FMCKJ"
+    },
+    {
+      "path": "2024/2024_FNMAP.csv",
+      "year": "2024",
+      "ticker": "FNMAP",
+      "label": "2024 FNMAP"
+    },
+    {
+      "path": "2024/2024_GMEX.csv",
+      "year": "2024",
+      "ticker": "GMEX",
+      "label": "2024 GMEX"
+    },
+    {
+      "path": "2024/2024_HTCO.csv",
+      "year": "2024",
+      "ticker": "HTCO",
+      "label": "2024 HTCO"
+    },
+    {
+      "path": "2024/2024_IDXG.csv",
+      "year": "2024",
+      "ticker": "IDXG",
+      "label": "2024 IDXG"
+    },
+    {
+      "path": "2024/2024_INOD.csv",
+      "year": "2024",
+      "ticker": "INOD",
+      "label": "2024 INOD"
+    },
+    {
+      "path": "2024/2024_INSG.csv",
+      "year": "2024",
+      "ticker": "INSG",
+      "label": "2024 INSG"
+    },
+    {
+      "path": "2024/2024_JANX.csv",
+      "year": "2024",
+      "ticker": "JANX",
+      "label": "2024 JANX"
+    },
+    {
+      "path": "2024/2024_KINS.csv",
+      "year": "2024",
+      "ticker": "KINS",
+      "label": "2024 KINS"
+    },
+    {
+      "path": "2024/2024_KULR.csv",
+      "year": "2024",
+      "ticker": "KULR",
+      "label": "2024 KULR"
+    },
+    {
+      "path": "2024/2024_LUNR.csv",
+      "year": "2024",
+      "ticker": "LUNR",
+      "label": "2024 LUNR"
+    },
+    {
+      "path": "2024/2024_MESO.csv",
+      "year": "2024",
+      "ticker": "MESO",
+      "label": "2024 MESO"
+    },
+    {
+      "path": "2024/2024_MNPR.csv",
+      "year": "2024",
+      "ticker": "MNPR",
+      "label": "2024 MNPR"
+    },
+    {
+      "path": "2024/2024_MSTR.csv",
+      "year": "2024",
+      "ticker": "MSTR",
+      "label": "2024 MSTR"
+    },
+    {
+      "path": "2024/2024_NXL.csv",
+      "year": "2024",
+      "ticker": "NXL",
+      "label": "2024 NXL"
+    },
+    {
+      "path": "2024/2024_PDYN.csv",
+      "year": "2024",
+      "ticker": "PDYN",
+      "label": "2024 PDYN"
+    },
+    {
+      "path": "2024/2024_PLTR.csv",
+      "year": "2024",
+      "ticker": "PLTR",
+      "label": "2024 PLTR"
+    },
+    {
+      "path": "2024/2024_PSIX.csv",
+      "year": "2024",
+      "ticker": "PSIX",
+      "label": "2024 PSIX"
+    },
+    {
+      "path": "2024/2024_QMCO.csv",
+      "year": "2024",
+      "ticker": "QMCO",
+      "label": "2024 QMCO"
+    },
+    {
+      "path": "2024/2024_QUBT.csv",
+      "year": "2024",
+      "ticker": "QUBT",
+      "label": "2024 QUBT"
+    },
+    {
+      "path": "2024/2024_RCAT.csv",
+      "year": "2024",
+      "ticker": "RCAT",
+      "label": "2024 RCAT"
+    },
+    {
+      "path": "2024/2024_RDW.csv",
+      "year": "2024",
+      "ticker": "RDW",
+      "label": "2024 RDW"
+    },
+    {
+      "path": "2024/2024_REAL.csv",
+      "year": "2024",
+      "ticker": "REAL",
+      "label": "2024 REAL"
+    },
+    {
+      "path": "2024/2024_RGTI.csv",
+      "year": "2024",
+      "ticker": "RGTI",
+      "label": "2024 RGTI"
+    },
+    {
+      "path": "2024/2024_RKLB.csv",
+      "year": "2024",
+      "ticker": "RKLB",
+      "label": "2024 RKLB"
+    },
+    {
+      "path": "2024/2024_ROOT.csv",
+      "year": "2024",
+      "ticker": "ROOT",
+      "label": "2024 ROOT"
+    },
+    {
+      "path": "2024/2024_SEZL.csv",
+      "year": "2024",
+      "ticker": "SEZL",
+      "label": "2024 SEZL"
+    },
+    {
+      "path": "2024/2024_SMEGF.csv",
+      "year": "2024",
+      "ticker": "SMEGF",
+      "label": "2024 SMEGF"
+    },
+    {
+      "path": "2024/2024_SMMT.csv",
+      "year": "2024",
+      "ticker": "SMMT",
+      "label": "2024 SMMT"
+    },
+    {
+      "path": "2024/2024_SMR.csv",
+      "year": "2024",
+      "ticker": "SMR",
+      "label": "2024 SMR"
+    },
+    {
+      "path": "2024/2024_SOUN.csv",
+      "year": "2024",
+      "ticker": "SOUN",
+      "label": "2024 SOUN"
+    },
+    {
+      "path": "2024/2024_SOUNW.csv",
+      "year": "2024",
+      "ticker": "SOUNW",
+      "label": "2024 SOUNW"
+    },
+    {
+      "path": "2024/2024_STKE.csv",
+      "year": "2024",
+      "ticker": "STKE",
+      "label": "2024 STKE"
+    },
+    {
+      "path": "2024/2024_TSSI.csv",
+      "year": "2024",
+      "ticker": "TSSI",
+      "label": "2024 TSSI"
+    },
+    {
+      "path": "2024/2024_WAVE.csv",
+      "year": "2024",
+      "ticker": "WAVE",
+      "label": "2024 WAVE"
+    },
+    {
+      "path": "2024/2024_WGS.csv",
+      "year": "2024",
+      "ticker": "WGS",
+      "label": "2024 WGS"
+    },
+    {
+      "path": "2024/2024_WLFC.csv",
+      "year": "2024",
+      "ticker": "WLFC",
+      "label": "2024 WLFC"
+    },
+    {
+      "path": "2024/2024_WQEY.csv",
+      "year": "2024",
+      "ticker": "WQEY",
+      "label": "2024 WQEY"
+    },
+    {
+      "path": "2024/2024_XCUR.csv",
+      "year": "2024",
+      "ticker": "XCUR",
+      "label": "2024 XCUR"
+    },
+    {
+      "path": "2025/2025_ABVX.csv",
+      "year": "2025",
+      "ticker": "ABVX",
+      "label": "2025 ABVX"
+    },
+    {
+      "path": "2025/2025_ABXXF.csv",
+      "year": "2025",
+      "ticker": "ABXXF",
+      "label": "2025 ABXXF"
+    },
+    {
+      "path": "2025/2025_AFJK.csv",
+      "year": "2025",
+      "ticker": "AFJK",
+      "label": "2025 AFJK"
+    },
+    {
+      "path": "2025/2025_ANRO.csv",
+      "year": "2025",
+      "ticker": "ANRO",
+      "label": "2025 ANRO"
+    },
+    {
+      "path": "2025/2025_ARIS.csv",
+      "year": "2025",
+      "ticker": "ARIS",
+      "label": "2025 ARIS"
+    },
+    {
+      "path": "2025/2025_AUGO.csv",
+      "year": "2025",
+      "ticker": "AUGO",
+      "label": "2025 AUGO"
+    },
+    {
+      "path": "2025/2025_AXTI.csv",
+      "year": "2025",
+      "ticker": "AXTI",
+      "label": "2025 AXTI"
+    },
+    {
+      "path": "2025/2025_CELC.csv",
+      "year": "2025",
+      "ticker": "CELC",
+      "label": "2025 CELC"
+    },
+    {
+      "path": "2025/2025_COGT.csv",
+      "year": "2025",
+      "ticker": "COGT",
+      "label": "2025 COGT"
+    },
+    {
+      "path": "2025/2025_DBVT.csv",
+      "year": "2025",
+      "ticker": "DBVT",
+      "label": "2025 DBVT"
+    },
+    {
+      "path": "2025/2025_DMRA.csv",
+      "year": "2025",
+      "ticker": "DMRA",
+      "label": "2025 DMRA"
+    },
+    {
+      "path": "2025/2025_ECHO.csv",
+      "year": "2025",
+      "ticker": "ECHO",
+      "label": "2025 ECHO"
+    },
+    {
+      "path": "2025/2025_FMCC.csv",
+      "year": "2025",
+      "ticker": "FMCC",
+      "label": "2025 FMCC"
+    },
+    {
+      "path": "2025/2025_FNLPF.csv",
+      "year": "2025",
+      "ticker": "FNLPF",
+      "label": "2025 FNLPF"
+    },
+    {
+      "path": "2025/2025_FNMA.csv",
+      "year": "2025",
+      "ticker": "FNMA",
+      "label": "2025 FNMA"
+    },
+    {
+      "path": "2025/2025_GMINF.csv",
+      "year": "2025",
+      "ticker": "GMINF",
+      "label": "2025 GMINF"
+    }
+  ]
+}

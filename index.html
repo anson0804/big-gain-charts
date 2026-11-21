@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大升股圖表</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div id="app">
+    <header class="toolbar">
+      <div class="row">
+        <div class="title">大升股圖表</div>
+        <label class="field">年份
+          <select id="year-filter" aria-label="年份"></select>
+        </label>
+        <label class="field">案例
+          <select id="case-select" aria-label="案例"></select>
+        </label>
+        <button type="button" id="prev-btn">上一張</button>
+        <button type="button" id="next-btn">下一張</button>
+        <span id="counter" class="counter">0 / 0</span>
+        <span class="spacer"></span>
+        <button type="button" id="measure-btn" title="拖拉兩點測量漲跌幅；亦可按住 Shift 拖拉">測量</button>
+        <button type="button" id="text-btn" title="在圖上點一下寫短註記">文字</button>
+      </div>
+      <div class="row">
+        <div class="legend">
+          <span><i class="swatch ema10"></i>EMA 10 <em class="val" id="val-ema10">—</em></span>
+          <span><i class="swatch ema20"></i>EMA 20 <em class="val" id="val-ema20">—</em></span>
+          <span><i class="swatch sma50"></i>SMA 50 <em class="val" id="val-sma50">—</em></span>
+          <span><i class="swatch sma200"></i>SMA 200 <em class="val" id="val-sma200">—</em></span>
+          <span><i class="swatch vol"></i>成交量</span>
+          <span id="ohlc" class="ohlc"></span>
+        </div>
+      </div>
+      <div id="status"></div>
+    </header>
+    <div id="chart-wrap">
+      <div id="chart"></div>
+      <div id="note-editor">
+        <input id="note-input" type="text" maxlength="80" placeholder="輸入文字，Enter 確定，Esc 取消" autocomplete="off">
+      </div>
+      <div id="boot-error"></div>
+    </div>
+  </div>
+  <!-- TradingView Lightweight Charts v5.3.0, vendored for offline use.
+       If the vendor file is missing, you may instead use:
+       https://cdn.jsdelivr.net/npm/lightweight-charts@5.3.0/dist/lightweight-charts.standalone.production.js -->
+  <script src="vendor/lightweight-charts.standalone.production.js"></script>
+  <script src="js/csv.js"></script>
+  <script src="js/ma.js"></script>
+  <script src="js/draw.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
