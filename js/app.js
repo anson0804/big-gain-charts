@@ -37,8 +37,6 @@
     valSma50: document.getElementById("val-sma50"),
     valSma200: document.getElementById("val-sma200"),
     ohlc: document.getElementById("ohlc"),
-    roundTotal: document.getElementById("round-total"),
-    progressBar: document.getElementById("progress-bar"),
   };
 
   const state = {
@@ -118,10 +116,6 @@
     els.prevBtn.disabled = !has || state.index <= 0;
     els.nextBtn.disabled = !has || state.index >= n - 1;
     els.counter.textContent = has ? `第 ${state.index + 1} 題 / ${n}` : `0 / ${n}`;
-    if (els.progressBar) {
-      const pct = has && n ? ((state.index + 1) / n) * 100 : 0;
-      els.progressBar.style.width = `${pct}%`;
-    }
     const c = currentCase();
     if (c && els.caseSelect.value !== c.path) els.caseSelect.value = c.path;
   }
@@ -185,7 +179,7 @@
         mouseWheel: true,
         pressedMouseMove: enabled,
         horzTouchDrag: enabled,
-        vertTouchDrag: enabled,
+        vertTouchDrag: false,
       },
     });
   }
@@ -228,9 +222,10 @@
 
   function showNoteEditor(clientX, clientY, existing) {
     const rect = els.wrap.getBoundingClientRect();
+    const editorWidth = Math.min(240, Math.max(120, rect.width - 16));
     let left = clientX - rect.left;
     let top = clientY - rect.top;
-    left = Math.max(8, Math.min(left, rect.width - 260));
+    left = Math.max(8, Math.min(left, Math.max(8, rect.width - editorWidth - 8)));
     top = Math.max(16, Math.min(top, rect.height - 16));
     els.noteEditor.style.left = `${left}px`;
     els.noteEditor.style.top = `${top}px`;
@@ -779,9 +774,6 @@
     }
 
     state.allCases = payload.cases || [];
-    if (els.roundTotal) {
-      els.roundTotal.textContent = state.allCases.length ? `${state.allCases.length} 題` : "";
-    }
     populateYears();
     populateCases();
 

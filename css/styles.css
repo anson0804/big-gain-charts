@@ -1,4 +1,212 @@
-:root {
+/* Essay page, visually aligned with the kindlyanson.com article pages.
+   Colors, type, and header are local so this GitHub Pages site does not
+   depend on kindlyanson.com stylesheets. */
+
+:root,
+[data-theme="light"] {
+  --bg: #f4f3ef;
+  --surface: #fbfaf7;
+  --surface-2: #f1eee8;
+  --s2: #edeae4;
+  --text: #28251d;
+  --muted: #7a7974;
+  --border: oklch(0.2 0.01 80 / 0.12);
+  --primary: #01696f;
+  --primary-hover: #0c4e54;
+  --shadow: 0 12px 32px oklch(0.2 0.01 80 / 0.1);
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #111214;
+  --surface: #17191d;
+  --surface-2: #1d2026;
+  --s2: #1d2026;
+  --text: #e2e6ee;
+  --muted: #95a0b3;
+  --border: rgba(255, 255, 255, 0.08);
+  --primary: #4ea1ff;
+  --primary-hover: #2d8eff;
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  font-family: "Satoshi", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+  background:
+    radial-gradient(circle at top right, rgba(78, 161, 255, 0.1), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(1, 105, 111, 0.1), transparent 24%),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
+
+.topbar {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in oklab, var(--surface) 86%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  min-width: max-content;
+  text-decoration: none;
+  color: inherit;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: max-content;
+}
+
+.brand-name {
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", system-ui, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.topbar .btn {
+  background: var(--s2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 10px;
+  font: inherit;
+  font-weight: 500;
+  font-size: 12px;
+  min-height: 34px;
+  cursor: pointer;
+}
+
+.topbar .btn:hover,
+.topbar .btn:active {
+  transform: none;
+}
+
+a:focus-visible,
+.topbar .btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+.essay {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  padding: 36px 24px 56px;
+  text-align: left;
+}
+
+.back-link {
+  display: inline-block;
+  margin: 0 0 18px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.back-link:hover {
+  color: var(--primary);
+}
+
+.cover-avatar {
+  display: block;
+  width: 96px;
+  height: 96px;
+  margin: 0 0 18px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  background: var(--s2);
+}
+
+.essay h1 {
+  margin: 0 0 12px;
+  max-width: 18em;
+  font-size: clamp(32px, 4.5vw, 48px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+}
+
+.dek {
+  margin: 0;
+  max-width: 22em;
+  font-size: clamp(18px, 2.2vw, 22px);
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: -0.02em;
+  color: var(--muted);
+}
+
+.essay-body {
+  display: grid;
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.essay-body p {
+  margin: 0;
+  max-width: 40em;
+  font-size: 18px;
+  line-height: 1.85;
+  color: var(--muted);
+}
+
+.essay-body p + p {
+  margin-top: 10px;
+}
+
+.chart-figure {
+  margin: 0;
+  width: 100%;
+  min-width: 0;
+}
+
+.chart-card {
   --bg: #0b0e13;
   --bg-elev: #141922;
   --bg-hover: #1c2330;
@@ -14,119 +222,30 @@
   --ema20: #5dade2;
   --sma50: #c39bd3;
   --sma200: #e59866;
-  --font: "Segoe UI", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html, body {
-  height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font);
-  font-size: 13px;
-  overflow: hidden;
-}
-
-#app {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  color-scheme: dark;
+  font-family: "Segoe UI", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+  font-size: 13px;
 }
 
-.site-header {
+.chart-card .toolbar {
   flex: 0 0 auto;
+  padding: 10px 12px 8px;
   background: var(--bg-elev);
   border-bottom: 1px solid var(--border);
-}
-
-.masthead {
-  display: grid;
-  grid-template-columns: minmax(148px, auto) minmax(0, 1fr);
-  gap: 8px 28px;
-  align-items: center;
-  padding: 12px 16px 10px;
-  background:
-    linear-gradient(90deg, rgba(245, 215, 110, 0.07), transparent 280px),
-    var(--bg-elev);
-}
-
-.brand h1 {
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1.15;
-}
-
-.kicker {
-  margin-top: 3px;
-  color: var(--accent);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-}
-
-.kicker span {
-  letter-spacing: 0;
-}
-
-.kicker span:empty {
-  display: none;
-}
-
-.kicker span::before {
-  content: "·";
-  margin: 0 0.45em;
-  color: var(--muted);
-  font-weight: 500;
-}
-
-.creed {
-  min-width: 0;
-  padding-left: 14px;
-  border-left: 2px solid var(--ema10);
-}
-
-.creed p {
-  color: #e8eef8;
-  font-size: 15px;
-  line-height: 1.45;
-}
-
-.creed p + p {
-  margin-top: 2px;
-}
-
-.creed p.creed-focus {
-  color: var(--ema10);
-  font-weight: 700;
-}
-
-.toolbar {
-  flex: 0 0 auto;
-  padding: 8px 12px 6px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.deck-progress {
-  height: 2px;
-  background: #1c2330;
-}
-
-.deck-progress span {
-  display: block;
-  height: 100%;
-  width: 0;
-  background: var(--ema10);
-}
-
-.row {
+.chart-card .row {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -134,15 +253,18 @@ html, body {
   min-height: 28px;
 }
 
-label.field {
+.chart-card label.field {
   display: flex;
   align-items: center;
   gap: 6px;
   color: var(--muted);
   white-space: nowrap;
+  min-width: 0;
 }
 
-select, button, input[type="text"] {
+.chart-card select,
+.chart-card button,
+.chart-card input[type="text"] {
   font: inherit;
   color: var(--text);
   background: var(--bg);
@@ -150,148 +272,158 @@ select, button, input[type="text"] {
   border-radius: 6px;
 }
 
-select, button {
-  height: 28px;
+.chart-card select,
+.chart-card button {
+  height: 32px;
   padding: 0 10px;
 }
 
-select {
+.chart-card select {
   max-width: 280px;
+  min-width: 0;
 }
 
-select#case-select {
-  min-width: 160px;
+.chart-card select#case-select {
+  min-width: 148px;
   max-width: 320px;
 }
 
-button {
+.chart-card button {
   cursor: pointer;
   background: #1a2130;
   white-space: nowrap;
 }
 
-button:hover:not(:disabled) {
+.chart-card button:hover:not(:disabled) {
   background: var(--bg-hover);
   border-color: #3a4558;
 }
 
-button:focus-visible,
-select:focus-visible,
-input:focus-visible {
+.chart-card button:focus-visible,
+.chart-card select:focus-visible,
+.chart-card input:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 1px;
 }
 
-button:disabled {
+.chart-card button:disabled {
   opacity: 0.4;
   cursor: default;
 }
 
-button.active {
+.chart-card button.active {
   background: var(--accent-dim);
   border-color: var(--accent);
   color: #fff;
 }
 
-.counter {
+.chart-card .counter {
   color: var(--muted);
   margin-left: 2px;
   min-width: 8.5em;
   font-variant-numeric: tabular-nums;
 }
 
-.spacer {
-  flex: 1;
+.chart-card .tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
 }
 
-.legend {
+.chart-card .legend {
   display: flex;
   align-items: center;
   gap: 12px;
   color: var(--muted);
   flex-wrap: wrap;
+  min-width: 0;
 }
 
-.legend span {
+.chart-card .legend span {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   white-space: nowrap;
 }
 
-.swatch {
+.chart-card .swatch {
   width: 10px;
   height: 2px;
   border-radius: 1px;
   display: inline-block;
 }
 
-.swatch.ema10 { background: var(--ema10); }
-.swatch.ema20 { background: var(--ema20); }
-.swatch.sma50 { background: var(--sma50); }
-.swatch.sma200 { background: var(--sma200); }
-.swatch.vol { background: #5c677a; height: 8px; width: 8px; border-radius: 2px; }
-
-.legend .val {
-  color: var(--text);
-  font-variant-numeric: tabular-nums;
-  min-width: 0;
+.chart-card .swatch.ema10 { background: var(--ema10); }
+.chart-card .swatch.ema20 { background: var(--ema20); }
+.chart-card .swatch.sma50 { background: var(--sma50); }
+.chart-card .swatch.sma200 { background: var(--sma200); }
+.chart-card .swatch.vol {
+  background: #5c677a;
+  height: 8px;
+  width: 8px;
+  border-radius: 2px;
 }
 
-.ohlc {
+.chart-card .legend .val {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  font-style: normal;
+}
+
+.chart-card .ohlc {
   color: var(--muted);
   font-variant-numeric: tabular-nums;
   margin-left: 4px;
+  white-space: normal;
 }
 
-.ohlc b {
+.chart-card .ohlc b {
   font-weight: 600;
   color: var(--text);
 }
 
-.ohlc.up b { color: var(--up); }
-.ohlc.down b { color: var(--down); }
+.chart-card .ohlc.up b { color: var(--up); }
+.chart-card .ohlc.down b { color: var(--down); }
 
-#status {
+.chart-card #status {
   min-height: 0;
   color: var(--muted);
   padding: 0 2px;
+  line-height: 1.45;
 }
 
-#status.error {
-  color: var(--danger);
-}
+.chart-card #status.error { color: var(--danger); }
+.chart-card #status.info { color: #9ec1ff; }
 
-#status.info {
-  color: #9ec1ff;
-}
-
-#chart-wrap {
-  flex: 1 1 auto;
-  min-height: 0;
+.chart-card #chart-wrap {
   position: relative;
-  background: var(--bg);
+  height: clamp(440px, 68vh, 640px);
+  min-height: 440px;
+  background: #0b0e13;
 }
 
-#chart {
+.chart-card #chart {
   width: 100%;
   height: 100%;
+  touch-action: pan-y;
 }
 
-#note-editor {
+.chart-card #note-editor {
   position: absolute;
   z-index: 20;
   display: none;
   transform: translate(8px, -50%);
+  max-width: calc(100% - 16px);
 }
 
-#note-editor.visible {
+.chart-card #note-editor.visible {
   display: block;
 }
 
-#note-editor input {
-  width: 240px;
-  height: 30px;
+.chart-card #note-editor input {
+  width: min(240px, 100%);
+  height: 36px;
   padding: 0 10px;
   background: #1b2230;
   border: 1px solid var(--accent);
@@ -299,7 +431,7 @@ button.active {
   outline: none;
 }
 
-#boot-error {
+.chart-card #boot-error {
   position: absolute;
   inset: 0;
   display: none;
@@ -308,26 +440,95 @@ button.active {
   padding: 24px;
   text-align: center;
   color: var(--danger);
-  background: var(--bg);
+  background: #0b0e13;
   z-index: 30;
 }
 
-#boot-error.visible {
+.chart-card #boot-error.visible {
   display: flex;
 }
 
+.footer {
+  padding: 18px 22px 26px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.footer a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  color: var(--primary);
+}
+
 @media (max-width: 760px) {
-  .masthead {
-    grid-template-columns: 1fr;
-    gap: 8px;
-    padding: 10px 12px 8px;
+  .topbar {
+    padding: 8px 12px;
   }
 
-  .brand h1 {
-    font-size: 22px;
+  .chart-card .tools {
+    margin-left: 0;
   }
 
-  .creed p {
-    font-size: 13.5px;
+  .chart-card label.field {
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .chart-card label.field select {
+    flex: 1 1 auto;
+    width: 100%;
+    max-width: none;
+  }
+
+  .chart-card select#case-select {
+    min-width: 0;
+    max-width: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .essay {
+    padding: 24px 14px 40px;
+  }
+
+  .topbar .btn {
+    min-height: 44px;
+    padding: 0 14px;
+  }
+
+  .chart-card .toolbar {
+    padding: 10px 10px 8px;
+  }
+
+  .chart-card select,
+  .chart-card button {
+    height: 40px;
+    padding: 0 12px;
+  }
+
+  .chart-card label.field {
+    flex: 1 1 100%;
+  }
+
+  .chart-card #chart-wrap {
+    height: clamp(460px, 74vh, 640px);
+    min-height: 460px;
+  }
+
+  .chart-card .legend {
+    gap: 8px 10px;
+  }
+
+  .chart-card .counter {
+    min-width: max-content;
+  }
+}
+
+@media (max-width: 420px) {
+  .brand-name {
+    font-size: 13px;
   }
 }
