@@ -34,6 +34,7 @@
     deleteDrawBtn: document.getElementById("delete-draw-btn"),
     fullscreenBtn: document.getElementById("fullscreen-btn"),
     saveDrawBtn: document.getElementById("save-draw-btn"),
+    downloadImageBtn: document.getElementById("download-image-btn"),
     clearDrawBtn: document.getElementById("clear-draw-btn"),
     drawList: document.getElementById("draw-list"),
     drawEmpty: document.getElementById("draw-empty"),
@@ -125,6 +126,47 @@
 
   function currentCase() {
     return state.filtered[state.index] || null;
+  }
+
+  function chartImageName() {
+    const item = currentCase();
+    let raw = "chart";
+    if (item && item.year && item.ticker) raw = `${item.year}_${item.ticker}`;
+    else if (item && item.path) raw = String(item.path).replace(/^.*\//, "").replace(/\.csv$/i, "");
+    const safe = raw.replace(/[^\w.-]+/g, "_").replace(/^_+|_+$/g, "") || "chart";
+    return `${safe}.png`;
+  }
+
+  function downloadChartImage() {
+    if (!chart || typeof chart.takeScreenshot !== "function") {
+      setStatus("無法下載圖片。", "error");
+      return;
+    }
+    let canvas;
+    try {
+      // Drawings and text notes paint on the chart's top canvas. The first
+      // argument composites that layer into the PNG; the bare price chart
+      // would otherwise omit every line the user drew.
+      canvas = chart.takeScreenshot(true);
+    } catch (err) {
+      setStatus("無法產生圖片。", "error");
+      return;
+    }
+    const name = chartImageName();
+    let url;
+    try {
+      url = canvas.toDataURL("image/png");
+    } catch (err) {
+      setStatus("無法產生圖片。", "error");
+      return;
+    }
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = name;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setStatus(`已下載 ${name}。`, "info");
   }
 
   function updateNav() {
@@ -1136,6 +1178,9 @@
       setStatus("已清除這個案例的畫線。", "info");
     });
     els.fullscreenBtn.addEventListener("click", toggleFullscreen);
+    if (els.downloadImageBtn) {
+      els.downloadImageBtn.addEventListener("click", downloadChartImage);
+    }
     document.addEventListener("fullscreenchange", syncFullscreenButton);
     document.addEventListener("webkitfullscreenchange", syncFullscreenButton);
 

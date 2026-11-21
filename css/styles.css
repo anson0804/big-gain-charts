@@ -324,11 +324,14 @@ a:focus-visible,
   font-variant-numeric: tabular-nums;
 }
 
-.chart-card .tools {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: auto;
+.chart-card .draw-tools {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.chart-card .draw-tools button {
+  flex: 0 0 auto;
+  padding: 0 8px;
 }
 
 .chart-card .legend {
@@ -594,10 +597,6 @@ body.fs-lock {
     padding: 8px 12px;
   }
 
-  .chart-card .tools {
-    margin-left: 0;
-  }
-
   .chart-card label.field {
     flex: 1 1 calc(50% - 8px);
   }
@@ -632,6 +631,16 @@ body.fs-lock {
   .chart-card button {
     height: 40px;
     padding: 0 12px;
+  }
+
+  .chart-card .draw-tools {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .chart-card .draw-tools button {
+    height: 36px;
+    padding: 0 8px;
   }
 
   .chart-card label.field {
