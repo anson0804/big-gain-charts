@@ -20,11 +20,11 @@
 - 下方獨立窗格顯示成交量
 - EMA 10、EMA 20、SMA 50、SMA 200（收市價計算；根數不足則隱藏）
 - 年份篩選、案例清單、上一題／下一題（左右方向鍵）
-- 測量：按「測量」後拖拉，或按住 Shift 拖拉，顯示漲跌幅與價差
+- 測量：按「測量」後拖拉，或按住 Shift 拖拉，顯示漲跌幅與價差。完成後跟畫線一起留在圖上，並存在這個瀏覽器的 localStorage（依每個案例分開）
 - 文字註記（保存在瀏覽器 localStorage，不寫回 CSV）
 - 畫線工具同一列：測量、文字、趨勢線、水平線、矩形、刪除、全螢幕、儲存、下載圖片。很窄的手機畫面才折成兩列
-- 「儲存」仍是每個案例的畫線 localStorage（只在這個瀏覽器）。「下載圖片」另存目前看見的圖為 PNG（K 線、成交量、均線、畫線與文字），檔名像 `2016_ACB.png`
-- 圖下「已儲存的畫線」可看、清除
+- 「儲存」仍是每個案例的畫線與測量 localStorage（只在這個瀏覽器）。「下載圖片」另存目前看見的圖為 PNG（K 線、成交量、均線、畫線、測量與文字），檔名像 `2016_ACB.png`
+- 圖下「已儲存的畫線」可看、刪除、清除（含測量）
 - 全螢幕：放大圖表；不支援 Fullscreen API 時改為鋪滿畫面
 
 使用細節見 `使用說明.txt`。
@@ -37,7 +37,7 @@ kindlyanson.com 的 `/visual-memory` 只嵌入圖表，文章留在該站。圖�
 
 `index.html?embed=1` 也會藏起文章外框。儀表板用的網址是 `embed.html`。
 
-這個靜態站不送 `X-Frame-Options`，也沒有 `frame-ancestors`，所以 kindlyanson.com、`*.vercel.app` 和其他網站都可以用 iframe 嵌進來。畫線與文字註記仍寫在這個網址自己的 localStorage，鍵與文章頁相同。全螢幕作用在圖表卡片上；父頁的 iframe 要加 `allow="fullscreen"`。手機若不支援 Fullscreen API，仍改成鋪滿這個畫面的一層。
+這個靜態站不送 `X-Frame-Options`，也沒有 `frame-ancestors`，所以 kindlyanson.com、`*.vercel.app` 和其他網站都可以用 iframe 嵌進來。畫線、測量與文字註記仍寫在這個網址自己的 localStorage，鍵與文章頁相同。全螢幕作用在圖表卡片上；父頁的 iframe 要加 `allow="fullscreen"`。手機若不支援 Fullscreen API，仍改成鋪滿這個畫面的一層。
 
 ## 放入股價資料
 
