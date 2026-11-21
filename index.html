@@ -17,6 +17,15 @@
       } catch (e) {}
     })();
   </script>
+  <script>
+    (function () {
+      try {
+        if (new URLSearchParams(location.search).get("embed") === "1") {
+          document.documentElement.classList.add("is-embed");
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>

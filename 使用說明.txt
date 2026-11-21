@@ -54,3 +54,12 @@
 
 ・網站只讀取 stock_data/西元年份/*.csv，並以 cases.json 作為清單。
 ・若某個檔案欄位損壞或沒有有效列，畫面會顯示錯誤，但仍可用上一題／下一題繼續翻。
+
+
+七、嵌入到其他網站
+
+・只有圖表的頁面是 embed.html（GitHub Pages 上為 /big-gain-charts/embed.html）。
+・index.html?embed=1 也會藏起文章、頁首與頁尾。文章原文不變。
+・畫線與文字註記存在這個網站自己的 localStorage，跟文章頁用同一組鍵。
+・全螢幕仍作用在圖表卡片。父頁 iframe 需要 allow="fullscreen"。
+・這個網站沒有禁止被其他網頁用 iframe 嵌入。
