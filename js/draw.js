@@ -93,6 +93,82 @@
     }
   }
 
+  function paintMeasure(ctx, x1, y1, x2, y2, p1, p2, bars, mediaSize, selected) {
+    const left = Math.min(x1, x2);
+    const top = Math.min(y1, y2);
+    const width = Math.abs(x2 - x1);
+    const height = Math.abs(y2 - y1);
+    const up = p2.price >= p1.price;
+    const color = up ? "38, 166, 154" : "239, 83, 80";
+
+    ctx.save();
+    ctx.fillStyle = `rgba(${color}, 0.12)`;
+    if (width > 1 && height > 1) {
+      ctx.fillRect(left, top, width, height);
+    }
+
+    ctx.strokeStyle = `rgba(${color}, 0.9)`;
+    ctx.lineWidth = selected ? 2 : 1;
+    ctx.setLineDash([5, 4]);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    [[x1, y1], [x2, y2]].forEach(([x, y]) => {
+      ctx.beginPath();
+      ctx.arc(x, y, selected ? 4.5 : 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = `rgb(${color})`;
+      ctx.fill();
+      ctx.lineWidth = selected ? 2 : 1.5;
+      ctx.strokeStyle = selected ? "#f5d76e" : "#0b0e13";
+      ctx.stroke();
+    });
+
+    const stats = measureStats(p1, p2, bars);
+    const lines = [formatPct(stats.pct), formatDelta(stats.delta)];
+    if (stats.barsBetween != null) {
+      lines.push(`${stats.barsBetween} 根`);
+    }
+
+    ctx.font = "12px Segoe UI, Microsoft JhengHei, sans-serif";
+    const padX = 8;
+    const padY = 5;
+    const lineH = 16;
+    const textW = Math.max(...lines.map((t) => ctx.measureText(t).width));
+    const boxW = textW + padX * 2;
+    const boxH = lines.length * lineH + padY * 2;
+    let lx = (x1 + x2) / 2 - boxW / 2;
+    let ly = (y1 + y2) / 2 - boxH / 2;
+    const maxX = mediaSize.width;
+    const maxY = mediaSize.height;
+    lx = Math.max(4, Math.min(lx, maxX - boxW - 4));
+    ly = Math.max(4, Math.min(ly, maxY - boxH - 4));
+
+    roundedRect(ctx, lx, ly, boxW, boxH, 4);
+    ctx.fillStyle = "rgba(11, 14, 19, 0.88)";
+    ctx.fill();
+    ctx.strokeStyle = selected ? "#f5d76e" : `rgba(${color}, 0.85)`;
+    ctx.lineWidth = selected ? 2 : 1;
+    ctx.stroke();
+
+    ctx.fillStyle = up ? "#26a69a" : "#ef5350";
+    ctx.textBaseline = "top";
+    lines.forEach((line, i) => {
+      if (i === 2) ctx.fillStyle = "#d7dde8";
+      ctx.fillText(line, lx + padX, ly + padY + i * lineH);
+    });
+    ctx.restore();
+    return { x: lx, y: ly, w: boxW, h: boxH };
+  }
+
   class MeasurePrimitive {
     constructor() {
       this._p1 = null;
@@ -149,84 +225,12 @@
 
       target.useMediaCoordinateSpace((scope) => {
         const ctx = scope.context;
-        const x1 = chart.timeScale().timeToCoordinate(p1.time);
-        const x2 = chart.timeScale().timeToCoordinate(p2.time);
+        const x1 = timeToX(chart, p1.time, this._bars);
+        const x2 = timeToX(chart, p2.time, this._bars);
         const y1 = series.priceToCoordinate(p1.price);
         const y2 = series.priceToCoordinate(p2.price);
         if (x1 == null || x2 == null || y1 == null || y2 == null) return;
-
-        const left = Math.min(x1, x2);
-        const top = Math.min(y1, y2);
-        const width = Math.abs(x2 - x1);
-        const height = Math.abs(y2 - y1);
-        const up = p2.price >= p1.price;
-        const color = up ? "38, 166, 154" : "239, 83, 80";
-
-        ctx.save();
-        ctx.fillStyle = `rgba(${color}, 0.12)`;
-        if (width > 1 && height > 1) {
-          ctx.fillRect(left, top, width, height);
-        }
-
-        ctx.strokeStyle = `rgba(${color}, 0.9)`;
-        ctx.lineWidth = 1;
-        ctx.setLineDash([5, 4]);
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-
-        [ [x1, y1], [x2, y2] ].forEach(([x, y]) => {
-          ctx.beginPath();
-          ctx.arc(x, y, 3.5, 0, Math.PI * 2);
-          ctx.fillStyle = `rgb(${color})`;
-          ctx.fill();
-          ctx.lineWidth = 1.5;
-          ctx.strokeStyle = "#0b0e13";
-          ctx.stroke();
-        });
-
-        const stats = measureStats(p1, p2, this._bars);
-        const lines = [formatPct(stats.pct), formatDelta(stats.delta)];
-        if (stats.barsBetween != null) {
-          lines.push(`${stats.barsBetween} 根`);
-        }
-
-        ctx.font = "12px Segoe UI, Microsoft JhengHei, sans-serif";
-        const padX = 8;
-        const padY = 5;
-        const lineH = 16;
-        const textW = Math.max(...lines.map((t) => ctx.measureText(t).width));
-        const boxW = textW + padX * 2;
-        const boxH = lines.length * lineH + padY * 2;
-        let lx = (x1 + x2) / 2 - boxW / 2;
-        let ly = (y1 + y2) / 2 - boxH / 2;
-        const maxX = scope.mediaSize.width;
-        const maxY = scope.mediaSize.height;
-        lx = Math.max(4, Math.min(lx, maxX - boxW - 4));
-        ly = Math.max(4, Math.min(ly, maxY - boxH - 4));
-
-        roundedRect(ctx, lx, ly, boxW, boxH, 4);
-        ctx.fillStyle = "rgba(11, 14, 19, 0.88)";
-        ctx.fill();
-        ctx.strokeStyle = `rgba(${color}, 0.85)`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        ctx.fillStyle = up ? "#26a69a" : "#ef5350";
-        ctx.textBaseline = "top";
-        lines.forEach((line, i) => {
-          if (i === 2) ctx.fillStyle = "#d7dde8";
-          ctx.fillText(line, lx + padX, ly + padY + i * lineH);
-        });
-        ctx.restore();
+        paintMeasure(ctx, x1, y1, x2, y2, p1, p2, this._bars, scope.mediaSize, false);
       });
     }
   }
@@ -427,6 +431,19 @@
             distToSegment(x, y, hit.x1, hit.y2, hit.x1, hit.y1),
           ].some((d) => d <= tol);
           matched = inside || nearEdge;
+        } else if (hit.kind === "measure") {
+          const nearPoint = Math.hypot(x - hit.x1, y - hit.y1) <= tol
+            || Math.hypot(x - hit.x2, y - hit.y2) <= tol;
+          const nearLine = [
+            distToSegment(x, y, hit.x1, hit.y1, hit.x2, hit.y2),
+            distToSegment(x, y, hit.x1, hit.y1, hit.x2, hit.y1),
+            distToSegment(x, y, hit.x2, hit.y1, hit.x2, hit.y2),
+          ].some((d) => d <= tol);
+          const label = hit.label;
+          const inLabel = !!(label
+            && x >= label.x && x <= label.x + label.w
+            && y >= label.y && y <= label.y + label.h);
+          matched = nearPoint || nearLine || inLabel;
         }
         if (matched) {
           return {
@@ -555,6 +572,30 @@
                 y1: geom.y1,
                 x2: geom.x2,
                 y2: geom.y2,
+              });
+            }
+          } else if (geom.kind === "measure") {
+            const box = paintMeasure(
+              ctx,
+              geom.x1,
+              geom.y1,
+              geom.x2,
+              geom.y2,
+              { time: shape.item.time1, price: shape.item.price1 },
+              { time: shape.item.time2, price: shape.item.price2 },
+              this._bars,
+              scope.mediaSize,
+              shape.selected
+            );
+            if (!shape.draft && shape.item.id) {
+              this._hits.push({
+                id: shape.item.id,
+                kind: "measure",
+                x1: geom.x1,
+                y1: geom.y1,
+                x2: geom.x2,
+                y2: geom.y2,
+                label: box,
               });
             }
           }

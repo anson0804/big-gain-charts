@@ -144,9 +144,9 @@
     }
     let canvas;
     try {
-      // Drawings and text notes paint on the chart's top canvas. The first
-      // argument composites that layer into the PNG; the bare price chart
-      // would otherwise omit every line the user drew.
+      // Drawings, saved measures, and text notes paint on the chart's top
+      // canvas. The first argument composites that layer into the PNG; the
+      // bare price chart would otherwise omit every mark the user drew.
       canvas = chart.takeScreenshot(true);
     } catch (err) {
       setStatus("無法產生圖片。", "error");
@@ -288,6 +288,7 @@
   function drawingName(type) {
     if (type === "hline") return "水平線";
     if (type === "rect") return "矩形";
+    if (type === "measure") return "測量";
     return "趨勢線";
   }
 
@@ -299,7 +300,7 @@
       if (!Number.isFinite(price)) return null;
       return { id, type: "hline", price };
     }
-    if (raw.type !== "trend" && raw.type !== "rect") return null;
+    if (raw.type !== "trend" && raw.type !== "rect" && raw.type !== "measure") return null;
     const time1 = CB.normalizeTime(raw.time1) || raw.time1;
     const time2 = CB.normalizeTime(raw.time2) || raw.time2;
     const price1 = Number(raw.price1);
@@ -331,7 +332,7 @@
       return true;
     } catch (err) {
       if (els.drawSaved) els.drawSaved.textContent = "未能儲存";
-      setStatus("無法儲存畫線（瀏覽器儲存空間可能已滿）。", "error");
+      setStatus("無法儲存畫線與測量（瀏覽器儲存空間可能已滿）。", "error");
       return false;
     }
   }
@@ -340,6 +341,10 @@
     if (item.type === "hline") return `水平線　${CB.formatPrice(item.price)}`;
     const a = `${item.time1} ${CB.formatPrice(item.price1)}`;
     const b = `${item.time2} ${CB.formatPrice(item.price2)}`;
+    if (item.type === "measure") {
+      const pct = item.price1 !== 0 ? ((item.price2 - item.price1) / item.price1) * 100 : null;
+      return `測量　${CB.formatPct(pct)}　${a} → ${b}`;
+    }
     return `${drawingName(item.type)}　${a} → ${b}`;
   }
 
@@ -809,15 +814,30 @@
         syncInteraction();
         return;
       }
+      finishMeasure(event);
+    };
+
+    function finishMeasure(event) {
       if (!state.measuring) return;
-      const point = getPointFromEvent(event) || measurePrimitive._p2;
-      if (state.measureStart && point) {
-        measurePrimitive.setPoints(state.measureStart, point);
-      }
+      const start = state.measureStart;
+      const point = (event && getPointFromEvent(event)) || (measurePrimitive && measurePrimitive._p2);
+      const moved = !!(event && start && Math.hypot(event.clientX - start.clientX, event.clientY - start.clientY) > 8);
       state.measuring = false;
       state.measureStart = null;
+      if (measurePrimitive) measurePrimitive.clear();
+      if (moved && start && point && pointsFarEnough(start, point) && state.currentPath) {
+        commitDrawing({
+          id: newDrawingId(),
+          type: "measure",
+          time1: start.time,
+          price1: start.price,
+          time2: point.time,
+          price2: point.price,
+        });
+        return;
+      }
       syncInteraction();
-    };
+    }
     paneEl.addEventListener("pointerup", endPointer);
     paneEl.addEventListener("pointercancel", (event) => {
       if (state.draft && state.draft.phase === "drag") {
@@ -1034,6 +1054,7 @@
       refreshNotesPrimitive();
       refreshDrawings();
       renderDrawList();
+      if (els.drawSaved) els.drawSaved.textContent = state.drawings.length ? "已儲存" : "";
       return;
     }
 
@@ -1130,6 +1151,7 @@
     if (els.drawSaved) {
       if (state.tool === "hline") els.drawSaved.textContent = "點一個價位";
       else if (state.tool === "trend" || state.tool === "rect") els.drawSaved.textContent = "拖拉或再點一下";
+      else if (state.tool === "measure") els.drawSaved.textContent = "拖拉兩點";
       else els.drawSaved.textContent = state.drawings.length ? "已儲存" : "";
     }
     syncInteraction();
@@ -1164,7 +1186,7 @@
       else setStatus("先點選一條畫線。", "info");
     });
     els.saveDrawBtn.addEventListener("click", () => {
-      if (persistDrawings()) setStatus("已儲存這個案例的畫線。", "info");
+      if (persistDrawings()) setStatus("已儲存這個案例的畫線與測量。", "info");
     });
     els.clearDrawBtn.addEventListener("click", () => {
       if (!state.currentPath || !state.drawings.length) return;
@@ -1175,7 +1197,7 @@
       if (els.drawSaved) els.drawSaved.textContent = "已清除";
       refreshDrawings();
       renderDrawList();
-      setStatus("已清除這個案例的畫線。", "info");
+      setStatus("已清除這個案例的畫線與測量。", "info");
     });
     els.fullscreenBtn.addEventListener("click", toggleFullscreen);
     if (els.downloadImageBtn) {
