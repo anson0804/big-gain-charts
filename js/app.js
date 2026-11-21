@@ -37,6 +37,8 @@
     valSma50: document.getElementById("val-sma50"),
     valSma200: document.getElementById("val-sma200"),
     ohlc: document.getElementById("ohlc"),
+    roundTotal: document.getElementById("round-total"),
+    progressBar: document.getElementById("progress-bar"),
   };
 
   const state = {
@@ -115,7 +117,11 @@
     const has = n > 0 && state.index >= 0;
     els.prevBtn.disabled = !has || state.index <= 0;
     els.nextBtn.disabled = !has || state.index >= n - 1;
-    els.counter.textContent = has ? `${state.index + 1} / ${n}` : `0 / ${n}`;
+    els.counter.textContent = has ? `第 ${state.index + 1} 題 / ${n}` : `0 / ${n}`;
+    if (els.progressBar) {
+      const pct = has && n ? ((state.index + 1) / n) * 100 : 0;
+      els.progressBar.style.width = `${pct}%`;
+    }
     const c = currentCase();
     if (c && els.caseSelect.value !== c.path) els.caseSelect.value = c.path;
   }
@@ -498,7 +504,7 @@
 
     if (index < 0 || index >= state.filtered.length) {
       if (fromNavEnd) {
-        setStatus(index < 0 ? "已是第一張。" : "已是最後一張。", "info");
+        setStatus(index < 0 ? "已是第一題。" : "已是最後一題。", "info");
       }
       updateNav();
       return;
@@ -619,7 +625,7 @@
 
   function goPrev() {
     if (state.index <= 0) {
-      setStatus("已是第一張。", "info");
+      setStatus("已是第一題。", "info");
       return;
     }
     loadCase(state.index - 1);
@@ -627,7 +633,7 @@
 
   function goNext() {
     if (state.index >= state.filtered.length - 1) {
-      setStatus("已是最後一張。", "info");
+      setStatus("已是最後一題。", "info");
       return;
     }
     loadCase(state.index + 1);
@@ -773,6 +779,9 @@
     }
 
     state.allCases = payload.cases || [];
+    if (els.roundTotal) {
+      els.roundTotal.textContent = state.allCases.length ? `${state.allCases.length} 題` : "";
+    }
     populateYears();
     populateCases();
 

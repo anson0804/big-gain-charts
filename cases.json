@@ -3,18 +3,6 @@
   "error": null,
   "cases": [
     {
-      "path": "2015/2015_FIEE.csv",
-      "year": "2015",
-      "ticker": "FIEE",
-      "label": "2015 FIEE"
-    },
-    {
-      "path": "2015/2015_WKHS.csv",
-      "year": "2015",
-      "ticker": "WKHS",
-      "label": "2015 WKHS"
-    },
-    {
       "path": "2016/2016_ACB.csv",
       "year": "2016",
       "ticker": "ACB",

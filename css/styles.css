@@ -14,7 +14,6 @@
   --ema20: #5dade2;
   --sma50: #c39bd3;
   --sma200: #e59866;
-  --toolbar-h: 86px;
   --font: "Segoe UI", "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", sans-serif;
 }
 
@@ -39,15 +38,92 @@ html, body {
   height: 100%;
 }
 
+.site-header {
+  flex: 0 0 auto;
+  background: var(--bg-elev);
+  border-bottom: 1px solid var(--border);
+}
+
+.masthead {
+  display: grid;
+  grid-template-columns: minmax(148px, auto) minmax(0, 1fr);
+  gap: 8px 28px;
+  align-items: center;
+  padding: 12px 16px 10px;
+  background:
+    linear-gradient(90deg, rgba(245, 215, 110, 0.07), transparent 280px),
+    var(--bg-elev);
+}
+
+.brand h1 {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.15;
+}
+
+.kicker {
+  margin-top: 3px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+}
+
+.kicker span {
+  letter-spacing: 0;
+}
+
+.kicker span:empty {
+  display: none;
+}
+
+.kicker span::before {
+  content: "·";
+  margin: 0 0.45em;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.creed {
+  min-width: 0;
+  padding-left: 14px;
+  border-left: 2px solid var(--ema10);
+}
+
+.creed p {
+  color: #e8eef8;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.creed p + p {
+  margin-top: 2px;
+}
+
+.creed p.creed-focus {
+  color: var(--ema10);
+  font-weight: 700;
+}
+
 .toolbar {
   flex: 0 0 auto;
-  min-height: var(--toolbar-h);
   padding: 8px 12px 6px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg-elev);
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.deck-progress {
+  height: 2px;
+  background: #1c2330;
+}
+
+.deck-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--ema10);
 }
 
 .row {
@@ -56,14 +132,6 @@ html, body {
   gap: 8px;
   flex-wrap: wrap;
   min-height: 28px;
-}
-
-.title {
-  font-size: 15px;
-  font-weight: 650;
-  letter-spacing: 0.02em;
-  margin-right: 8px;
-  white-space: nowrap;
 }
 
 label.field {
@@ -107,6 +175,13 @@ button:hover:not(:disabled) {
   border-color: #3a4558;
 }
 
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
 button:disabled {
   opacity: 0.4;
   cursor: default;
@@ -121,7 +196,8 @@ button.active {
 .counter {
   color: var(--muted);
   margin-left: 2px;
-  min-width: 4.5em;
+  min-width: 8.5em;
+  font-variant-numeric: tabular-nums;
 }
 
 .spacer {
@@ -238,4 +314,20 @@ button.active {
 
 #boot-error.visible {
   display: flex;
+}
+
+@media (max-width: 760px) {
+  .masthead {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 10px 12px 8px;
+  }
+
+  .brand h1 {
+    font-size: 22px;
+  }
+
+  .creed p {
+    font-size: 13.5px;
+  }
 }
