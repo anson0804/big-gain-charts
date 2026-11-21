@@ -332,6 +332,239 @@
     }
   }
 
+  function distToSegment(px, py, x1, y1, x2, y2) {
+    const dx = x2 - x1;
+    const dy = y2 - y1;
+    const len2 = dx * dx + dy * dy;
+    let t = len2 === 0 ? 0 : ((px - x1) * dx + (py - y1) * dy) / len2;
+    t = Math.max(0, Math.min(1, t));
+    const x = x1 + t * dx;
+    const y = y1 + t * dy;
+    return Math.hypot(px - x, py - y);
+  }
+
+  function timeToX(chart, time, bars) {
+    if (!chart || time == null) return null;
+    const scale = chart.timeScale();
+    const direct = scale.timeToCoordinate(time);
+    if (direct != null) return direct;
+    if (!bars || typeof scale.logicalToCoordinate !== "function") return null;
+    const key = normalizeTime(time);
+    for (let i = 0; i < bars.length; i += 1) {
+      if (bars[i].time === key) return scale.logicalToCoordinate(i);
+    }
+    return null;
+  }
+
+  function drawingColor(type, selected) {
+    if (selected) return { stroke: "#f5d76e", fill: "rgba(245, 215, 110, 0.16)" };
+    if (type === "hline") return { stroke: "#ff7ab8", fill: "rgba(255, 122, 184, 0.16)" };
+    if (type === "rect") return { stroke: "#d2ff6b", fill: "rgba(210, 255, 107, 0.12)" };
+    return { stroke: "#7fdbff", fill: "rgba(127, 219, 255, 0.14)" };
+  }
+
+  class DrawingsPrimitive {
+    constructor() {
+      this._items = [];
+      this._selectedId = null;
+      this._draft = null;
+      this._bars = [];
+      this._hits = [];
+      this._chart = null;
+      this._series = null;
+      this._requestUpdate = null;
+      this._view = new OverlayView(this);
+    }
+
+    attached(param) {
+      this._chart = param.chart;
+      this._series = param.series;
+      this._requestUpdate = param.requestUpdate;
+    }
+
+    detached() {
+      this._chart = null;
+      this._series = null;
+      this._requestUpdate = null;
+    }
+
+    setBars(bars) {
+      this._bars = bars || [];
+    }
+
+    setModel(items, selectedId, draft) {
+      this._items = items || [];
+      this._selectedId = selectedId || null;
+      this._draft = draft || null;
+      if (this._requestUpdate) this._requestUpdate();
+    }
+
+    paneViews() {
+      return [this._view];
+    }
+
+    updateAllViews() {}
+
+    hitTest(x, y) {
+      const tol = 8;
+      for (let i = this._hits.length - 1; i >= 0; i -= 1) {
+        const hit = this._hits[i];
+        let matched = false;
+        if (hit.kind === "hline") {
+          matched = Math.abs(y - hit.y) <= tol;
+        } else if (hit.kind === "trend") {
+          matched = distToSegment(x, y, hit.x1, hit.y1, hit.x2, hit.y2) <= tol;
+        } else if (hit.kind === "rect") {
+          const left = Math.min(hit.x1, hit.x2) - tol;
+          const right = Math.max(hit.x1, hit.x2) + tol;
+          const top = Math.min(hit.y1, hit.y2) - tol;
+          const bottom = Math.max(hit.y1, hit.y2) + tol;
+          const inside = x >= left && x <= right && y >= top && y <= bottom;
+          const nearEdge = [
+            distToSegment(x, y, hit.x1, hit.y1, hit.x2, hit.y1),
+            distToSegment(x, y, hit.x2, hit.y1, hit.x2, hit.y2),
+            distToSegment(x, y, hit.x2, hit.y2, hit.x1, hit.y2),
+            distToSegment(x, y, hit.x1, hit.y2, hit.x1, hit.y1),
+          ].some((d) => d <= tol);
+          matched = inside || nearEdge;
+        }
+        if (matched) {
+          return {
+            externalId: hit.id,
+            zOrder: "top",
+            cursorStyle: "pointer",
+            itemType: "primitive",
+            distance: 0,
+            hitTestPriority: 2,
+          };
+        }
+      }
+      return null;
+    }
+
+    _project(item) {
+      const chart = this._chart;
+      const series = this._series;
+      if (!chart || !series) return null;
+      if (item.type === "hline") {
+        const y = series.priceToCoordinate(item.price);
+        if (y == null) return null;
+        return { kind: "hline", y };
+      }
+      const x1 = timeToX(chart, item.time1, this._bars);
+      const x2 = timeToX(chart, item.time2, this._bars);
+      const y1 = series.priceToCoordinate(item.price1);
+      const y2 = series.priceToCoordinate(item.price2);
+      if (x1 == null || x2 == null || y1 == null || y2 == null) return null;
+      return { kind: item.type, x1, y1, x2, y2 };
+    }
+
+    draw(target) {
+      const chart = this._chart;
+      const series = this._series;
+      this._hits = [];
+      if (!chart || !series) return;
+
+      const shapes = this._items.map((item) => ({
+        item,
+        geom: this._project(item),
+        selected: item.id === this._selectedId,
+        draft: false,
+      }));
+      if (this._draft) {
+        shapes.push({
+          item: this._draft,
+          geom: this._project(this._draft),
+          selected: true,
+          draft: true,
+        });
+      }
+
+      target.useMediaCoordinateSpace((scope) => {
+        const ctx = scope.context;
+        const width = scope.mediaSize.width;
+        ctx.save();
+        ctx.font = "12px Segoe UI, Microsoft JhengHei, sans-serif";
+        shapes.forEach((shape) => {
+          const geom = shape.geom;
+          if (!geom) return;
+          const color = drawingColor(shape.item.type, shape.selected);
+          ctx.save();
+          ctx.lineWidth = shape.selected ? 2 : 1.5;
+          ctx.strokeStyle = color.stroke;
+          ctx.fillStyle = color.fill;
+          if (shape.draft) ctx.setLineDash([5, 4]);
+
+          if (geom.kind === "hline") {
+            ctx.beginPath();
+            ctx.moveTo(0, geom.y);
+            ctx.lineTo(width, geom.y);
+            ctx.stroke();
+            const label = formatPrice(shape.item.price);
+            const padX = 6;
+            const boxW = ctx.measureText(label).width + padX * 2;
+            const boxH = 18;
+            const lx = 8;
+            const ly = Math.max(4, Math.min(geom.y - boxH - 4, scope.mediaSize.height - boxH - 4));
+            roundedRect(ctx, lx, ly, boxW, boxH, 3);
+            ctx.fillStyle = "rgba(11, 14, 19, 0.9)";
+            ctx.fill();
+            ctx.strokeStyle = color.stroke;
+            ctx.lineWidth = 1;
+            ctx.setLineDash([]);
+            ctx.stroke();
+            ctx.fillStyle = color.stroke;
+            ctx.textBaseline = "middle";
+            ctx.fillText(label, lx + padX, ly + boxH / 2);
+            if (!shape.draft && shape.item.id) {
+              this._hits.push({ id: shape.item.id, kind: "hline", y: geom.y, width });
+            }
+          } else if (geom.kind === "trend") {
+            ctx.beginPath();
+            ctx.moveTo(geom.x1, geom.y1);
+            ctx.lineTo(geom.x2, geom.y2);
+            ctx.stroke();
+            [[geom.x1, geom.y1], [geom.x2, geom.y2]].forEach(([x, y]) => {
+              ctx.beginPath();
+              ctx.arc(x, y, shape.selected ? 4 : 3, 0, Math.PI * 2);
+              ctx.fillStyle = color.stroke;
+              ctx.fill();
+            });
+            if (!shape.draft && shape.item.id) {
+              this._hits.push({
+                id: shape.item.id,
+                kind: "trend",
+                x1: geom.x1,
+                y1: geom.y1,
+                x2: geom.x2,
+                y2: geom.y2,
+              });
+            }
+          } else if (geom.kind === "rect") {
+            const left = Math.min(geom.x1, geom.x2);
+            const top = Math.min(geom.y1, geom.y2);
+            const w = Math.abs(geom.x2 - geom.x1);
+            const h = Math.abs(geom.y2 - geom.y1);
+            if (w > 0 && h > 0) ctx.fillRect(left, top, w, h);
+            ctx.strokeRect(left, top, Math.max(w, 1), Math.max(h, 1));
+            if (!shape.draft && shape.item.id) {
+              this._hits.push({
+                id: shape.item.id,
+                kind: "rect",
+                x1: geom.x1,
+                y1: geom.y1,
+                x2: geom.x2,
+                y2: geom.y2,
+              });
+            }
+          }
+          ctx.restore();
+        });
+        ctx.restore();
+      });
+    }
+  }
+
   ChartBrowser.normalizeTime = normalizeTime;
   ChartBrowser.formatPrice = formatPrice;
   ChartBrowser.formatVolume = formatVolume;
@@ -339,4 +572,5 @@
   ChartBrowser.formatDelta = formatDelta;
   ChartBrowser.MeasurePrimitive = MeasurePrimitive;
   ChartBrowser.NotesPrimitive = NotesPrimitive;
+  ChartBrowser.DrawingsPrimitive = DrawingsPrimitive;
 })(window);

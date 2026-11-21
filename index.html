@@ -66,6 +66,13 @@
                   <button type="button" id="text-btn" title="在圖上點一下寫短註記">文字</button>
                 </span>
               </div>
+              <div class="row draw-tools" role="toolbar" aria-label="畫圖">
+                <button type="button" id="trend-btn" title="拖拉，或點兩下，畫趨勢線">趨勢線</button>
+                <button type="button" id="hline-btn" title="在一個價位畫水平線">水平線</button>
+                <button type="button" id="rect-btn" title="拖拉，或點兩下，畫矩形">矩形</button>
+                <button type="button" id="delete-draw-btn" title="刪除選取的畫線" disabled>刪除</button>
+                <button type="button" id="fullscreen-btn" title="放大圖表">全螢幕</button>
+              </div>
               <div class="row">
                 <div class="legend">
                   <span><i class="swatch ema10"></i>EMA 10 <em class="val" id="val-ema10">—</em></span>
@@ -85,6 +92,18 @@
               </div>
               <div id="boot-error"></div>
             </div>
+            <aside class="draw-panel" aria-label="已儲存的畫線">
+              <div class="draw-panel-head">
+                <strong>已儲存的畫線</strong>
+                <span id="draw-saved" class="draw-saved"></span>
+                <span class="draw-actions">
+                  <button type="button" id="save-draw-btn">儲存</button>
+                  <button type="button" id="clear-draw-btn">清除</button>
+                </span>
+              </div>
+              <p id="draw-empty" class="draw-empty">這個案例還沒有畫線。</p>
+              <ul id="draw-list" class="draw-list"></ul>
+            </aside>
           </div>
         </figure>
       </div>
