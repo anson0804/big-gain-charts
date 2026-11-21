@@ -1039,9 +1039,10 @@
 
   function syncFullscreenButton() {
     const on = isChartFullscreen();
+    const embedded = document.documentElement.classList.contains("is-embed");
     els.fullscreenBtn.textContent = on ? "結束全螢幕" : "全螢幕";
     els.fullscreenBtn.classList.toggle("active", on);
-    els.fullscreenBtn.title = on ? "回到文章" : "放大圖表";
+    els.fullscreenBtn.title = on ? (embedded ? "結束全螢幕" : "回到文章") : "放大圖表";
     requestAnimationFrame(() => resizeChart());
     setTimeout(() => resizeChart(), 60);
   }

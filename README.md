@@ -27,6 +27,16 @@
 
 使用細節見 `使用說明.txt`。
 
+## 嵌入圖表
+
+kindlyanson.com 的 `/visual-memory` 只嵌入圖表，文章留在該站。圖表頁是：
+
+    https://anson0804.github.io/big-gain-charts/embed.html
+
+`index.html?embed=1` 也會藏起文章外框。儀表板用的網址是 `embed.html`。
+
+這個靜態站不送 `X-Frame-Options`，也沒有 `frame-ancestors`，所以 kindlyanson.com、`*.vercel.app` 和其他網站都可以用 iframe 嵌進來。畫線與文字註記仍寫在這個網址自己的 localStorage，鍵與文章頁相同。全螢幕作用在圖表卡片上；父頁的 iframe 要加 `allow="fullscreen"`。手機若不支援 Fullscreen API，仍改成鋪滿這個畫面的一層。
+
 ## 放入股價資料
 
 1. 把本機 `stock_data` 裡的年份資料夾複製到本倉庫的 `stock_data/`，例如：
