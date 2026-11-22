@@ -35,6 +35,10 @@
     fullscreenBtn: document.getElementById("fullscreen-btn"),
     saveDrawBtn: document.getElementById("save-draw-btn"),
     downloadImageBtn: document.getElementById("download-image-btn"),
+    downloadMenu: document.getElementById("download-menu"),
+    downloadMenuWrap: document.querySelector(".download-menu-wrap"),
+    downloadThisBtn: document.getElementById("download-this-btn"),
+    downloadAllBtn: document.getElementById("download-all-btn"),
     clearDrawBtn: document.getElementById("clear-draw-btn"),
     drawList: document.getElementById("draw-list"),
     drawEmpty: document.getElementById("draw-empty"),
@@ -80,6 +84,7 @@
   let measurePrimitive = null;
   let notesPrimitive = null;
   let drawingsPrimitive = null;
+  let exportBusy = false;
 
   function setStatus(message, kind) {
     els.status.textContent = message || "";
@@ -128,8 +133,7 @@
     return state.filtered[state.index] || null;
   }
 
-  function chartImageName() {
-    const item = currentCase();
+  function chartImageNameFor(item) {
     let raw = "chart";
     if (item && item.year && item.ticker) raw = `${item.year}_${item.ticker}`;
     else if (item && item.path) raw = String(item.path).replace(/^.*\//, "").replace(/\.csv$/i, "");
@@ -137,7 +141,36 @@
     return `${safe}.png`;
   }
 
+  function chartImageName() {
+    return chartImageNameFor(currentCase());
+  }
+
+  function uniquePngName(item, used) {
+    const base = chartImageNameFor(item).replace(/\.png$/i, "");
+    let name = `${base}.png`;
+    let n = 2;
+    while (used.has(name)) {
+      name = `${base}_${n}.png`;
+      n += 1;
+    }
+    used.add(name);
+    return name;
+  }
+
+  function triggerDownload(href, name) {
+    const link = document.createElement("a");
+    link.href = href;
+    link.download = name;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  }
+
   function downloadChartImage() {
+    if (exportBusy) {
+      setStatus("正在匯出，請稍候。", "info");
+      return;
+    }
     if (!chart || typeof chart.takeScreenshot !== "function") {
       setStatus("無法下載圖片。", "error");
       return;
@@ -160,13 +193,328 @@
       setStatus("無法產生圖片。", "error");
       return;
     }
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = name;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
+    triggerDownload(url, name);
     setStatus(`已下載 ${name}。`, "info");
+  }
+
+  function isDownloadMenuOpen() {
+    return !!(els.downloadMenu && !els.downloadMenu.hidden);
+  }
+
+  function closeDownloadMenu() {
+    if (!els.downloadMenu) return;
+    els.downloadMenu.hidden = true;
+    if (els.downloadImageBtn) els.downloadImageBtn.setAttribute("aria-expanded", "false");
+  }
+
+  function toggleDownloadMenu() {
+    if (!els.downloadMenu) {
+      downloadChartImage();
+      return;
+    }
+    const open = !isDownloadMenuOpen();
+    els.downloadMenu.hidden = !open;
+    if (els.downloadImageBtn) els.downloadImageBtn.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  function safeDataPath(path) {
+    if (!path || typeof path !== "string") return null;
+    if (path.includes("..") || path.includes("\\") || path.startsWith("/")) return null;
+    if (!/^[0-9A-Za-z_./-]+\.csv$/.test(path)) return null;
+    return path;
+  }
+
+  function collectExportJobs() {
+    const marks = new Map();
+    const remember = (path, drawings, notes) => {
+      const safe = safeDataPath(path);
+      if (!safe) return;
+      const prev = marks.get(safe) || { drawings: [], notes: [] };
+      if (drawings && drawings.length) prev.drawings = drawings;
+      if (notes && notes.length) prev.notes = notes;
+      if (prev.drawings.length || prev.notes.length) marks.set(safe, prev);
+    };
+    try {
+      for (let i = 0; i < localStorage.length; i += 1) {
+        const key = localStorage.key(i);
+        if (!key) continue;
+        if (key.startsWith(DRAW_PREFIX)) remember(key.slice(DRAW_PREFIX.length), loadDrawings(key.slice(DRAW_PREFIX.length)), null);
+        else if (key.startsWith(STORAGE_PREFIX)) remember(key.slice(STORAGE_PREFIX.length), null, loadNotes(key.slice(STORAGE_PREFIX.length)));
+      }
+    } catch (err) {
+      /* storage may be unavailable */
+    }
+    if (state.currentPath && (state.drawings.length || state.notes.length)) {
+      const safe = safeDataPath(state.currentPath);
+      if (safe) {
+        marks.set(safe, {
+          drawings: state.drawings.slice(),
+          notes: state.notes.slice(),
+        });
+      }
+    }
+    const ordered = [];
+    const seen = new Set();
+    state.allCases.forEach((item) => {
+      const saved = marks.get(item.path);
+      if (!saved) return;
+      seen.add(item.path);
+      ordered.push({
+        item,
+        label: item.label || item.path,
+        drawings: saved.drawings,
+        notes: saved.notes,
+      });
+    });
+    marks.forEach((saved, path) => {
+      if (seen.has(path)) return;
+      const stem = String(path).split("/").pop().replace(/\.csv$/i, "");
+      ordered.push({
+        item: { path, year: "", ticker: "", label: stem },
+        label: stem,
+        drawings: saved.drawings,
+        notes: saved.notes,
+      });
+    });
+    return ordered;
+  }
+
+  function waitPaint() {
+    return new Promise((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(resolve));
+    });
+  }
+
+  function canvasToPngBytes(canvas) {
+    return new Promise((resolve, reject) => {
+      if (typeof canvas.toBlob === "function") {
+        canvas.toBlob((blob) => {
+          if (!blob) {
+            reject(new Error("png"));
+            return;
+          }
+          blob.arrayBuffer().then((buf) => resolve(new Uint8Array(buf)), reject);
+        }, "image/png");
+        return;
+      }
+      try {
+        const url = canvas.toDataURL("image/png");
+        const bin = atob(url.split(",")[1] || "");
+        const out = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i += 1) out[i] = bin.charCodeAt(i);
+        resolve(out);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  }
+
+  function layoutExportPanes(exportChart, host) {
+    const panes = exportChart.panes();
+    if (panes.length < 2) return;
+    const total = host.clientHeight;
+    if (total < 80) return;
+    const vol = Math.max(72, Math.min(180, Math.round(total * 0.22)));
+    panes[1].setHeight(vol);
+  }
+
+  function createSnapshotChart(host, width, height) {
+    const exportChart = LC.createChart(host, {
+      layout: {
+        background: { color: COLORS.background },
+        textColor: COLORS.text,
+        fontFamily: "Segoe UI, Microsoft JhengHei, sans-serif",
+        attributionLogo: true,
+        panes: {
+          separatorColor: COLORS.border,
+          separatorHoverColor: "#3d8bfd66",
+        },
+      },
+      grid: {
+        vertLines: { color: COLORS.grid },
+        horzLines: { color: COLORS.grid },
+      },
+      crosshair: {
+        mode: LC.CrosshairMode.Magnet,
+        vertLine: { color: COLORS.crosshair, labelBackgroundColor: "#2a3140" },
+        horzLine: { color: COLORS.crosshair, labelBackgroundColor: "#2a3140" },
+      },
+      rightPriceScale: { borderColor: COLORS.border },
+      timeScale: {
+        borderColor: COLORS.border,
+        timeVisible: false,
+        secondsVisible: false,
+      },
+      localization: { dateFormat: "yyyy-MM-dd" },
+      autoSize: false,
+      width,
+      height,
+    });
+    const candle = exportChart.addSeries(LC.CandlestickSeries, {
+      upColor: COLORS.up,
+      downColor: COLORS.down,
+      borderUpColor: COLORS.up,
+      borderDownColor: COLORS.down,
+      wickUpColor: COLORS.up,
+      wickDownColor: COLORS.down,
+    });
+    const ma = {
+      ema10: exportChart.addSeries(LC.LineSeries, {
+        color: COLORS.ema10,
+        lineWidth: 1,
+        priceLineVisible: false,
+        lastValueVisible: false,
+        crosshairMarkerVisible: false,
+      }),
+      ema20: exportChart.addSeries(LC.LineSeries, {
+        color: COLORS.ema20,
+        lineWidth: 1,
+        priceLineVisible: false,
+        lastValueVisible: false,
+        crosshairMarkerVisible: false,
+      }),
+      sma50: exportChart.addSeries(LC.LineSeries, {
+        color: COLORS.sma50,
+        lineWidth: 1,
+        priceLineVisible: false,
+        lastValueVisible: false,
+        crosshairMarkerVisible: false,
+      }),
+      sma200: exportChart.addSeries(LC.LineSeries, {
+        color: COLORS.sma200,
+        lineWidth: 2,
+        priceLineVisible: false,
+        lastValueVisible: false,
+        crosshairMarkerVisible: false,
+      }),
+    };
+    const volPane = exportChart.addPane(true);
+    const volume = volPane.addSeries(LC.HistogramSeries, {
+      priceFormat: { type: "volume" },
+      priceScaleId: "volume",
+      lastValueVisible: false,
+      priceLineVisible: false,
+    });
+    volume.priceScale().applyOptions({
+      scaleMargins: { top: 0.15, bottom: 0 },
+      borderColor: COLORS.border,
+    });
+    const measure = new CB.MeasurePrimitive();
+    const notes = new CB.NotesPrimitive();
+    const drawings = new CB.DrawingsPrimitive();
+    candle.attachPrimitive(measure);
+    candle.attachPrimitive(notes);
+    candle.attachPrimitive(drawings);
+    layoutExportPanes(exportChart, host);
+    return { chart: exportChart, candle, volume, ma, measure, notes, drawings };
+  }
+
+  async function renderJobPng(snap, job) {
+    const safe = safeDataPath(job.item.path);
+    if (!safe) throw new Error("path");
+    const res = await fetch(`stock_data/${encodeURI(safe)}`, { cache: "no-store" });
+    if (!res.ok) throw new Error(String(res.status));
+    const parsed = CB.parsePriceCsv(await res.text());
+    if (parsed.error || !parsed.bars.length) throw new Error(parsed.error || "empty");
+    const overlays = CB.computeOverlays(parsed.bars);
+    snap.candle.setData(parsed.bars.map((b) => ({
+      time: b.time,
+      open: b.open,
+      high: b.high,
+      low: b.low,
+      close: b.close,
+    })));
+    snap.volume.setData(parsed.bars.map((b) => ({
+      time: b.time,
+      value: b.volume,
+      color: b.close >= b.open ? "rgba(38, 166, 154, 0.55)" : "rgba(239, 83, 80, 0.55)",
+    })));
+    snap.ma.ema10.setData(overlays.series.ema10);
+    snap.ma.ema20.setData(overlays.series.ema20);
+    snap.ma.sma50.setData(overlays.series.sma50);
+    snap.ma.sma200.setData(overlays.series.sma200);
+    snap.measure.setBars(parsed.bars);
+    snap.measure.clear();
+    snap.notes.setNotes(job.notes, null);
+    snap.drawings.setBars(parsed.bars);
+    snap.drawings.setModel(job.drawings, null, null);
+    snap.chart.timeScale().fitContent();
+    layoutExportPanes(snap.chart, snap.host);
+    await waitPaint();
+    const canvas = snap.chart.takeScreenshot(true);
+    const bytes = await canvasToPngBytes(canvas);
+    if (!bytes || bytes.length < 32) throw new Error("png");
+    return bytes;
+  }
+
+  async function downloadAllSavedImages() {
+    if (exportBusy) {
+      setStatus("正在匯出，請稍候。", "info");
+      return;
+    }
+    if (!CB.storeZip) {
+      setStatus("無法產生壓縮檔。", "error");
+      return;
+    }
+    const jobs = collectExportJobs();
+    if (!jobs.length) {
+      setStatus("這個瀏覽器還沒有已儲存的畫線或文字。", "info");
+      return;
+    }
+    const width = els.chart.clientWidth;
+    const height = els.chart.clientHeight;
+    if (width < 40 || height < 40) {
+      setStatus("無法產生圖片。", "error");
+      return;
+    }
+    exportBusy = true;
+    closeDownloadMenu();
+    const host = document.createElement("div");
+    host.setAttribute("aria-hidden", "true");
+    host.style.cssText = `position:fixed;left:0;top:0;transform:translateX(-120vw);pointer-events:none;width:${width}px;height:${height}px;overflow:hidden;`;
+    document.body.appendChild(host);
+    let snap = null;
+    const files = [];
+    const used = new Set();
+    let failed = 0;
+    try {
+      snap = createSnapshotChart(host, width, height);
+      snap.host = host;
+      for (let i = 0; i < jobs.length; i += 1) {
+        const job = jobs[i];
+        setStatus(`正在匯出 ${i + 1}/${jobs.length}：${job.label}`, "info");
+        try {
+          const data = await renderJobPng(snap, job);
+          files.push({ name: uniquePngName(job.item, used), data });
+        } catch (err) {
+          failed += 1;
+        }
+      }
+    } catch (err) {
+      setStatus("無法產生圖片。", "error");
+      return;
+    } finally {
+      if (snap && snap.chart && typeof snap.chart.remove === "function") snap.chart.remove();
+      host.remove();
+      exportBusy = false;
+    }
+    if (!files.length) {
+      setStatus("無法產生圖片。", "error");
+      return;
+    }
+    let zip;
+    try {
+      zip = CB.storeZip(files);
+    } catch (err) {
+      setStatus("無法產生壓縮檔。", "error");
+      return;
+    }
+    const blob = new Blob([zip], { type: "application/zip" });
+    const url = URL.createObjectURL(blob);
+    triggerDownload(url, "已儲存的畫線.zip");
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    const failNote = failed ? `，${failed} 個案例無法產生圖片` : "";
+    setStatus(`已下載 已儲存的畫線.zip（${files.length} 張${failNote}）。`, "info");
   }
 
   function updateNav() {
@@ -1037,6 +1385,12 @@
 
     if (isTypingTarget(event.target)) return;
 
+    if (event.key === "Escape" && isDownloadMenuOpen()) {
+      event.preventDefault();
+      closeDownloadMenu();
+      return;
+    }
+
     if (event.key === "Escape") {
       event.preventDefault();
       if (state.draft) {
@@ -1201,8 +1555,30 @@
     });
     els.fullscreenBtn.addEventListener("click", toggleFullscreen);
     if (els.downloadImageBtn) {
-      els.downloadImageBtn.addEventListener("click", downloadChartImage);
+      els.downloadImageBtn.addEventListener("click", (event) => {
+        event.stopPropagation();
+        toggleDownloadMenu();
+      });
     }
+    if (els.downloadThisBtn) {
+      els.downloadThisBtn.addEventListener("click", (event) => {
+        event.stopPropagation();
+        closeDownloadMenu();
+        downloadChartImage();
+      });
+    }
+    if (els.downloadAllBtn) {
+      els.downloadAllBtn.addEventListener("click", (event) => {
+        event.stopPropagation();
+        closeDownloadMenu();
+        downloadAllSavedImages();
+      });
+    }
+    document.addEventListener("click", (event) => {
+      if (!isDownloadMenuOpen()) return;
+      if (els.downloadMenuWrap && els.downloadMenuWrap.contains(event.target)) return;
+      closeDownloadMenu();
+    });
     document.addEventListener("fullscreenchange", syncFullscreenButton);
     document.addEventListener("webkitfullscreenchange", syncFullscreenButton);
 

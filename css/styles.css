@@ -236,6 +236,8 @@ a:focus-visible,
 }
 
 .chart-card .toolbar {
+  position: relative;
+  z-index: 4;
   flex: 0 0 auto;
   padding: 10px 12px 8px;
   background: var(--bg-elev);
@@ -332,6 +334,48 @@ a:focus-visible,
 .chart-card .draw-tools button {
   flex: 0 0 auto;
   padding: 0 8px;
+}
+
+.chart-card .download-menu-wrap {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+}
+
+.chart-card .download-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 5;
+  min-width: max-content;
+  padding: 4px;
+  background: #141a24;
+  border: 1px solid #2a3140;
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+}
+
+.chart-card .download-menu[hidden] {
+  display: none;
+}
+
+.chart-card .draw-tools .download-menu button {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 32px;
+  margin: 0;
+  padding: 6px 10px;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.chart-card .download-menu button:hover:not(:disabled) {
+  background: #243044;
+  border-color: transparent;
 }
 
 .chart-card .legend {
