@@ -32,7 +32,13 @@
         <button type="button" id="delete-draw-btn" title="刪除選取的畫線或測量" disabled>刪除</button>
         <button type="button" id="fullscreen-btn" title="放大圖表">全螢幕</button>
         <button type="button" id="save-draw-btn" title="把這個案例的畫線與測量存到這個瀏覽器，不會下載檔案">儲存</button>
-        <button type="button" id="download-image-btn" title="下載目前圖表的 PNG，包含 K 線、成交量、均線、畫線、測量與文字">下載圖片</button>
+        <span class="download-menu-wrap">
+          <button type="button" id="download-image-btn" aria-haspopup="menu" aria-expanded="false" aria-controls="download-menu" title="下載這張圖，或把這個瀏覽器裡已儲存畫線的案例打包成 ZIP">下載圖片</button>
+          <div id="download-menu" class="download-menu" role="menu" hidden>
+            <button type="button" id="download-this-btn" role="menuitem">只下載這張圖</button>
+            <button type="button" id="download-all-btn" role="menuitem">下載全部已儲存的畫線</button>
+          </div>
+        </span>
       </div>
       <div class="row">
         <div class="legend">
@@ -71,6 +77,7 @@
   <script src="js/csv.js"></script>
   <script src="js/ma.js"></script>
   <script src="js/draw.js"></script>
+  <script src="js/zip.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
